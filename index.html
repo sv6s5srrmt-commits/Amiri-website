@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amiri — أميري</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@500;700;900&family=Frank+Ruhl+Libre:wght@500;700;900&family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Hebrew:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2A4A;
+    --ink-deep:#12203A;
+    --parchment:#F7F1E3;
+    --parchment-warm:#F1E8D2;
+    --gold:#C9A227;
+    --gold-bright:#E3C158;
+    --coral:#E4572E;
+    --charcoal:#2B2118;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  body{
+    background:var(--parchment);
+    color:var(--charcoal);
+    font-family:'Noto Sans Arabic','Noto Sans',sans-serif;
+    overflow-x:hidden;
+  }
+
+  [dir="rtl"] .display{font-family:'Amiri', serif;}
+  [dir="ltr"][lang="en"] .display{font-family:'Playfair Display', serif;}
+  [dir="rtl"][lang="he"] .display{font-family:'Frank Ruhl Libre', serif;}
+  [lang="he"]{font-family:'Noto Sans Hebrew','Noto Sans',sans-serif;}
+  [lang="en"]{font-family:'Noto Sans',sans-serif;}
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:24px 6vw;
+    position:relative;
+    z-index:10;
+  }
+  .logo{
+    font-size:1.7rem;
+    font-weight:700;
+    color:var(--ink);
+    letter-spacing:0.5px;
+  }
+  .logo span{color:var(--gold);}
+  .lang-switch{
+    display:flex;
+    gap:6px;
+    background:rgba(27,42,74,0.06);
+    border-radius:999px;
+    padding:4px;
+  }
+  .lang-switch button{
+    border:none;
+    background:transparent;
+    padding:8px 16px;
+    border-radius:999px;
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--ink);
+    cursor:pointer;
+    transition:all 0.25s ease;
+    font-family:inherit;
+  }
+  .lang-switch button.active{
+    background:var(--ink);
+    color:var(--parchment);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:6vh 6vw 10vh;
+    text-align:center;
+    max-width:900px;
+    margin:0 auto;
+  }
+
+  .ornament{
+    width:56px;
+    height:56px;
+    margin:0 auto 28px;
+    opacity:0.85;
+  }
+
+  .eyebrow{
+    display:inline-block;
+    font-size:0.78rem;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+    margin-bottom:22px;
+    border:1px solid var(--gold);
+    padding:6px 18px;
+    border-radius:999px;
+  }
+
+  h1{
+    font-size:clamp(2.1rem, 5vw, 3.6rem);
+    line-height:1.35;
+    color:var(--ink);
+    font-weight:700;
+    margin-bottom:26px;
+  }
+
+  .sub{
+    font-size:clamp(1rem, 2vw, 1.25rem);
+    color:#4A4136;
+    max-width:560px;
+    margin:0 auto 42px;
+    line-height:1.8;
+  }
+
+  .cta-row{
+    display:flex;
+    gap:16px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  .btn-primary{
+    background:var(--coral);
+    color:#fff;
+    border:none;
+    padding:16px 38px;
+    border-radius:8px;
+    font-size:1.05rem;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 8px 24px rgba(228,87,46,0.35);
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+    font-family:inherit;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(228,87,46,0.45);}
+
+  .btn-secondary{
+    background:transparent;
+    color:var(--ink);
+    border:1.5px solid var(--ink);
+    padding:16px 38px;
+    border-radius:8px;
+    font-size:1.05rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.2s ease;
+    font-family:inherit;
+  }
+  .btn-secondary:hover{background:var(--ink);color:var(--parchment);}
+
+  /* ---------- Storybook frame illustration ---------- */
+  .stage{
+    position:relative;
+    max-width:640px;
+    margin:64px auto 0;
+    padding:36px;
+    background:var(--ink);
+    border-radius:20px;
+    box-shadow:0 30px 60px rgba(27,42,74,0.25);
+  }
+  .stage::before, .stage::after{
+    content:'';
+    position:absolute;
+    inset:12px;
+    border:1.5px solid rgba(201,162,39,0.5);
+    border-radius:12px;
+    pointer-events:none;
+  }
+  .stage-inner{
+    background:var(--parchment-warm);
+    border-radius:8px;
+    padding:40px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:220px;
+  }
+  .hero-figure{
+    width:100%;
+    max-width:420px;
+    height:auto;
+  }
+  .stage-caption{
+    color:var(--gold-bright);
+    font-size:0.85rem;
+    margin-top:18px;
+    letter-spacing:0.5px;
+  }
+
+  /* ---------- Steps ---------- */
+  .steps{
+    max-width:1000px;
+    margin:14vh auto 10vh;
+    padding:0 6vw;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:36px;
+  }
+  @media(max-width:760px){.steps{grid-template-columns:1fr;gap:28px;}}
+
+  .step{
+    text-align:center;
+    padding:8px;
+  }
+  .step-num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:var(--ink);
+    color:var(--gold-bright);
+    font-family:'Playfair Display',serif;
+    font-weight:700;
+    font-size:1.1rem;
+    margin-bottom:18px;
+  }
+  .step h3{
+    font-size:1.15rem;
+    color:var(--ink);
+    margin-bottom:10px;
+    font-weight:700;
+  }
+  .step p{
+    font-size:0.95rem;
+    color:#5A5142;
+    line-height:1.7;
+  }
+
+  /* ---------- Footer CTA ---------- */
+  .footer-cta{
+    background:var(--ink-deep);
+    color:var(--parchment);
+    text-align:center;
+    padding:10vh 6vw;
+  }
+  .footer-cta h2{
+    font-size:clamp(1.6rem,3.5vw,2.3rem);
+    margin-bottom:20px;
+    font-weight:700;
+  }
+  .footer-cta p{
+    color:rgba(247,241,227,0.7);
+    margin-bottom:32px;
+    font-size:1rem;
+  }
+  footer.legal{
+    text-align:center;
+    padding:28px;
+    font-size:0.8rem;
+    color:#9C9284;
+    background:var(--ink-deep);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+
+  button:focus-visible, .lang-switch button:focus-visible{
+    outline:3px solid var(--coral);
+    outline-offset:2px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo" data-i18n="logo">أميري <span>Amiri</span></div>
+  <div class="lang-switch">
+    <button data-lang="ar" class="active">عربي</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="he">עברית</button>
+  </div>
+</header>
+
+<section class="hero">
+  <svg class="ornament" viewBox="0 0 24 24" fill="none">
+    <path d="M12 2 L14 9 L21 9 L15.5 13.5 L17.5 21 L12 16.5 L6.5 21 L8.5 13.5 L3 9 L10 9 Z" stroke="#C9A227" stroke-width="1.2" fill="#C9A227" fill-opacity="0.15"/>
+  </svg>
+  <div class="eyebrow" data-i18n="eyebrow">قصص أطفال مخصصة</div>
+  <h1 class="display" data-i18n="headline">كل طفل بطل... بس مش كل بطل إله قصة.<br>اكتب قصة ابنك، وخلّيه يعيشها.</h1>
+  <div class="cta-row">
+    <button class="btn-primary" data-i18n="cta-primary">ابدأ قصتك</button>
+    <button class="btn-secondary" data-i18n="cta-secondary">شوف مثال</button>
+  </div>
+
+  <div class="stage">
+    <div class="stage-inner">
+      <svg class="hero-figure" viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="sky" cx="42%" cy="38%" r="80%">
+            <stop offset="0%" stop-color="#FDEBB0"/>
+            <stop offset="45%" stop-color="#F2B84E"/>
+            <stop offset="100%" stop-color="#C9752A"/>
+          </radialGradient>
+          <linearGradient id="cape" x1="0" y1="0" x2="1" y2="0.4">
+            <stop offset="0%" stop-color="#FF6B3D"/>
+            <stop offset="100%" stop-color="#B23E1E"/>
+          </linearGradient>
+        </defs>
+
+        <!-- sky backdrop -->
+        <rect x="0" y="0" width="320" height="240" rx="6" fill="url(#sky)"/>
+
+        <!-- sunburst rays -->
+        <g stroke="#FFF3D6" stroke-width="3" opacity="0.55">
+          <line x1="150" y1="95" x2="150" y2="40"/>
+          <line x1="150" y1="95" x2="105" y2="55"/>
+          <line x1="150" y1="95" x2="195" y2="55"/>
+          <line x1="150" y1="95" x2="70" y2="90"/>
+          <line x1="150" y1="95" x2="230" y2="90"/>
+        </g>
+
+        <!-- distant hills -->
+        <path d="M0 196 Q60 172 120 194 T240 192 T320 198 V240 H0 Z" fill="#1B2A4A" opacity="0.92"/>
+        <path d="M0 212 Q80 192 160 213 T320 210 V240 H0 Z" fill="#12203A"/>
+
+        <!-- stars -->
+        <g fill="#FFFDF3" opacity="0.9">
+          <circle cx="266" cy="34" r="2.2"/>
+          <circle cx="284" cy="58" r="1.6"/>
+          <circle cx="250" cy="66" r="1.4"/>
+        </g>
+
+        <!-- speed lines behind flying figure -->
+        <g stroke="#FFF3D6" stroke-width="4" stroke-linecap="round" opacity="0.7">
+          <line x1="196" y1="150" x2="238" y2="146"/>
+          <line x1="192" y1="164" x2="246" y2="162"/>
+          <line x1="200" y1="178" x2="234" y2="180"/>
+        </g>
+
+        <!-- flowing cape, streaming back -->
+        <path d="M158 108 C118 104 78 118 58 150 C90 148 108 158 118 178 C132 158 150 150 168 154 C182 140 178 118 158 108 Z" fill="url(#cape)"/>
+
+        <!-- body, leaning forward as if flying -->
+        <g transform="rotate(-14 160 130)">
+          <rect x="140" y="128" width="40" height="46" rx="14" fill="#1B2A4A"/>
+          <circle cx="160" cy="166" r="15" fill="#FFD873"/>
+          <path d="M153 166 L158 171 L168 159" stroke="#1B2A4A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+          <!-- one arm forward (flying pose), one arm back -->
+          <path d="M140 138 Q108 120 88 96" stroke="#F1D9B0" stroke-width="14" stroke-linecap="round"/>
+          <path d="M180 140 Q206 152 224 168" stroke="#F1D9B0" stroke-width="14" stroke-linecap="round"/>
+
+          <!-- head -->
+          <circle cx="160" cy="98" r="30" fill="#F1D9B0"/>
+          <path d="M132 96 Q132 68 160 68 Q188 68 188 96 Q188 78 160 78 Q132 78 132 96 Z" fill="#2B2118"/>
+          <path d="M138 92 Q160 84 182 92 Q182 100 160 102 Q138 100 138 92 Z" fill="#1B2A4A"/>
+          <path d="M150 108 Q160 118 170 108" stroke="#7A4A2B" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        </g>
+
+        <!-- sparkle bursts near lead hand -->
+        <g stroke="#FFFDF3" stroke-width="2.4" stroke-linecap="round">
+          <path d="M82 82 L82 94 M75 88 L89 88"/>
+          <path d="M96 70 L96 78 M91 74 L101 74"/>
+        </g>
+      </svg>
+    </div>
+    <p class="stage-caption" data-i18n="stage-caption">طفلك هو البطل. اصنع له مغامرة برسومٍ فنية تحمل اسمه، وتبقى ذكرى تدوم للأبد.</p>
+  </div>
+</section>
+
+<section class="steps">
+  <div class="step">
+    <div class="step-num" data-i18n="step1-num">١</div>
+    <h3 data-i18n="step1-title">احكيلنا عنه</h3>
+    <p data-i18n="step1-body">اسمه، عمره، هواياته، وشو بيحبه — بضع جمل بس.</p>
+  </div>
+  <div class="step">
+    <div class="step-num" data-i18n="step2-num">٢</div>
+    <h3 data-i18n="step2-title">اختار شكله</h3>
+    <p data-i18n="step2-body">رسمة كرتونية جاهزة تشبهه، أو ارفع صورته الحقيقية.</p>
+  </div>
+  <div class="step">
+    <div class="step-num" data-i18n="step3-num">٣</div>
+    <h3 data-i18n="step3-title">استلم القصة</h3>
+    <p data-i18n="step3-body">قصة كاملة، بطلها طفلك، جاهزة أونلاين أو مطبوعة بين إيديه.</p>
+  </div>
+</section>
+
+<section class="footer-cta">
+  <h2 class="display" data-i18n="footer-headline">جاهز تخلّي طفلك بطل؟</h2>
+  <button class="btn-primary" data-i18n="cta-primary">ابدأ قصتك</button>
+</section>
+
+<footer class="legal" data-i18n="legal">© 2026 Amiri — أميري. جميع الحقوق محفوظة.</footer>
+
+<script>
+const translations = {
+  ar: {
+    logo: 'أميري <span>Amiri</span>',
+    eyebrow: 'قصص أطفال مخصصة',
+    headline: 'كل طفل بطل... بس مش كل بطل إله قصة.<br>اكتب قصة ابنك، وخلّيه يعيشها.',
+    'cta-primary': 'ابدأ قصتك',
+    'cta-secondary': 'شوف مثال',
+    'stage-caption': 'طفلك هو البطل. اصنع له مغامرة برسومٍ فنية تحمل اسمه، وتبقى ذكرى تدوم للأبد.',
+    'step1-num': '١',
+    'step2-num': '٢',
+    'step3-num': '٣',
+    'step1-title': 'احكيلنا عنه',
+    'step1-body': 'اسمه، عمره، هواياته، وشو بيحبه — بضع جمل بس.',
+    'step2-title': 'اختار شكله',
+    'step2-body': 'رسمة كرتونية جاهزة تشبهه، أو ارفع صورته الحقيقية.',
+    'step3-title': 'استلم القصة',
+    'step3-body': 'قصة كاملة، بطلها طفلك، جاهزة أونلاين أو مطبوعة بين إيديه.',
+    'footer-headline': 'جاهز تخلّي طفلك بطل؟',
+    legal: '© 2026 Amiri — أميري. جميع الحقوق محفوظة.'
+  },
+  en: {
+    logo: 'Amiri <span>أميري</span>',
+    eyebrow: 'Personalized Children\'s Stories',
+    headline: 'Every child is a hero.<br>Not every hero has a story — until now.',
+    'cta-primary': 'Start Your Story',
+    'cta-secondary': 'See an Example',
+    'stage-caption': 'Your child is the hero. Give them an artful adventure that carries their name — a keepsake that lasts forever.',
+    'step1-num': '1',
+    'step2-num': '2',
+    'step3-num': '3',
+    'step1-title': 'Tell Us About Them',
+    'step1-body': 'Name, age, hobbies, what they love — just a few sentences.',
+    'step2-title': 'Choose Their Look',
+    'step2-body': 'Pick a ready-made cartoon style, or upload a real photo.',
+    'step3-title': 'Get Their Story',
+    'step3-body': 'A complete story, starring your child, ready online or printed in their hands.',
+    'footer-headline': 'Ready to make your child a hero?',
+    legal: '© 2026 Amiri. All rights reserved.'
+  },
+  he: {
+    logo: 'אמירי <span>Amiri</span>',
+    eyebrow: 'סיפורי ילדים אישיים',
+    headline: 'כל ילד הוא גיבור...<br>אבל לא לכל גיבור יש סיפור. כתבו את סיפורו של הילד שלכם.',
+    'cta-primary': 'התחילו את הסיפור',
+    'cta-secondary': 'צפו בדוגמה',
+    'stage-caption': 'הילד שלכם הוא הגיבור. תנו לו הרפתקה אמנותית הנושאת את שמו — זיכרון שנשאר לנצח.',
+    'step1-num': '1',
+    'step2-num': '2',
+    'step3-num': '3',
+    'step1-title': 'ספרו לנו עליו',
+    'step1-body': 'שם, גיל, תחביבים, ומה הוא אוהב — רק כמה משפטים.',
+    'step2-title': 'בחרו את המראה',
+    'step2-body': 'איור מצויר מוכן שדומה לו, או העלו תמונה אמיתית.',
+    'step3-title': 'קבלו את הסיפור',
+    'step3-body': 'סיפור שלם, שבו הילד שלכם הוא הגיבור, מוכן אונליין או מודפס בין ידיו.',
+    'footer-headline': 'מוכנים להפוך את הילד שלכם לגיבור?',
+    legal: '© 2026 אמירי — Amiri. כל הזכויות שמורות.'
+  }
+};
+
+function setLang(lang){
+  const dir = lang === 'en' ? 'ltr' : 'rtl';
+  document.documentElement.lang = lang;
+  document.documentElement.dir = dir;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(translations[lang][key]) el.innerHTML = translations[lang][key];
+  });
+  document.querySelectorAll('.lang-switch button').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+}
+
+document.querySelectorAll('.lang-switch button').forEach(btn=>{
+  btn.addEventListener('click', ()=> setLang(btn.dataset.lang));
+});
+</script>
+
+</body>
+</html>

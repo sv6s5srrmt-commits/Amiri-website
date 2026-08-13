@@ -1,0 +1,54 @@
+// ملف: api/generate-story.js
+// هاد الملف لازم يكون بمجلد اسمه "api" بجذر مشروعك على Vercel
+// مثال المسار الكامل: my-amiri-site/api/generate-story.js
+
+export default async function handler(req, res) {
+  // نسمح فقط بطلبات POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { name, age, hobby1, hobby2, lang } = req.body;
+
+  // تحقق بسيط إنو البيانات المطلوبة موجودة
+  if (!name || !age || !hobby1 || !hobby2) {
+    return res.status(400).json({ error: 'بيانات ناقصة' });
+  }
+
+  const prompts = {
+    ar: `اكتب قصة أطفال قصيرة ودافئة باللغة العربية الفصحى المبسطة (تناسب طفل عمره ${age} سنوات)، بطلها طفل اسمه "${name}"، وتدور أحداثها حول مغامرة تجمع بين "${hobby1}" و "${hobby2}". يجب أن تكون بين 150-220 كلمة، وفيها بداية ووسط ونهاية سعيدة، والطفل شجاع وذكي، وتحمل رسالة إيجابية بسيطة بالنهاية.
+أعطني فقط بصيغة JSON بدون أي نص إضافي أو علامات markdown: {"title": "عنوان القصة", "story": "نص القصة كاملاً"}`,
+    en: `Write a short, warm children's story in English (suitable for a ${age}-year-old), starring a child named "${name}", about an adventure combining "${hobby1}" and "${hobby2}". It should be 150-220 words, with a beginning, middle, and happy ending, and the child should be brave and clever, with a simple positive message at the end.
+Reply ONLY in JSON with no extra text or markdown: {"title": "story title", "story": "the full story text"}`,
+    he: `כתבו סיפור ילדים קצר וחם בעברית (מתאים לילד בגיל ${age}), שגיבורו ילד בשם "${name}", על הרפתקה המשלבת "${hobby1}" ו-"${hobby2}". הסיפור צריך להיות בין 150-220 מילים, עם התחלה, אמצע וסוף שמח, והילד אמור להיות אמיץ וחכם, עם מסר חיובי פשוט בסוף.
+ענו רק בפורמט JSON ללא טקסט נוסף או markdown: {"title": "כותרת הסיפור", "story": "טקסט הסיפור המלא"}`
+  };
+
+  const selectedPrompt = prompts[lang] || prompts.ar;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.ANTHROPIC_API_KEY, // المفتاح مخبّى هون، آمن، ما حدا شايفه
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: selectedPrompt }]
+      })
+    });
+
+    const data = await response.json();
+    const raw = data.content.map(block => block.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    return res.status(200).json(parsed);
+  } catch (error) {
+    console.error('Story generation error:', error);
+    return res.status(500).json({ error: 'ما قدرنا نولّد القصة، جرّب مرة تانية' });
+  }
+}

@@ -556,7 +556,7 @@ document.getElementById('genBtn').addEventListener('click', async ()=>{
   } catch(err){
     console.error(err);
     document.getElementById('storyTitle').textContent = '—';
-    document.getElementById('storyText').textContent = lang === 'en' ? 'Something went wrong. Please try again.' : (lang === 'he' ? 'משהו השתבש. נסו שוב.' : 'صار في خطأ، جرّب مرة تانية.');
+    document.getElementById('storyText').textContent = err.message || 'صار في خطأ، جرّب مرة تانية.';
     result.classList.add('show');
   } finally {
     loading.classList.remove('show');

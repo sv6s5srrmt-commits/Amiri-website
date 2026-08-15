@@ -38,6 +38,12 @@ Reply ONLY in JSON with no extra text or markdown: {"title": "story title", "sto
     });
 
     const data = await response.json();
+
+    if (!response.ok) {
+      console.error('Anthropic API error:', data);
+      return res.status(500).json({ error: 'خطأ من الذكاء الاصطناعي: ' + (data.error?.message || JSON.stringify(data)) });
+    }
+
     const raw = data.content.map(block => block.text || '').join('');
     const clean = raw.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
@@ -45,6 +51,7 @@ Reply ONLY in JSON with no extra text or markdown: {"title": "story title", "sto
     return res.status(200).json(parsed);
   } catch (error) {
     console.error('Story generation error:', error);
-    return res.status(500).json({ error: 'ما قدرنا نولّد القصة، جرّب مرة تانية' });
+    return res.status(500).json({ error: 'خطأ تقني: ' + error.message });
   }
 }
+

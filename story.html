@@ -1,569 +1,78 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ابدأ قصتك — Amiri</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@500;700;900&family=Frank+Ruhl+Libre:wght@500;700;900&family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Hebrew:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ink:#1B2A4A;
-    --ink-deep:#12203A;
-    --parchment:#F7F1E3;
-    --parchment-warm:#F1E8D2;
-    --gold:#C9A227;
-    --gold-bright:#E3C158;
-    --coral:#E4572E;
-    --charcoal:#2B2118;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{
-    background:var(--parchment);
-    color:var(--charcoal);
-    font-family:'Noto Sans Arabic','Noto Sans',sans-serif;
-  }
-  [dir="rtl"] .display{font-family:'Amiri', serif;}
-  [dir="ltr"][lang="en"] .display{font-family:'Playfair Display', serif;}
-  [dir="rtl"][lang="he"] .display{font-family:'Frank Ruhl Libre', serif;}
-  [lang="he"]{font-family:'Noto Sans Hebrew','Noto Sans',sans-serif;}
-  [lang="en"]{font-family:'Noto Sans',sans-serif;}
+// ملف: api/generate-story.js
+// هاد الملف لازم يكون بمجلد اسمه "api" بجذر مشروعك على Vercel
+// مثال المسار الكامل: my-amiri-site/api/generate-story.js
 
-  header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:24px 6vw;
-  }
-  .logo{font-size:1.5rem;font-weight:700;color:var(--ink);}
-  .logo span{color:var(--gold);}
-  .lang-switch{display:flex;gap:6px;background:rgba(27,42,74,0.06);border-radius:999px;padding:4px;}
-  .lang-switch button{
-    border:none;background:transparent;padding:8px 16px;border-radius:999px;
-    font-size:0.85rem;font-weight:600;color:var(--ink);cursor:pointer;
-    transition:all 0.25s ease;font-family:inherit;
-  }
-  .lang-switch button.active{background:var(--ink);color:var(--parchment);}
-
-  .wrap{max-width:760px;margin:0 auto;padding:0 6vw 10vh;}
-
-  .progress{
-    display:flex;
-    gap:8px;
-    margin-bottom:32px;
-  }
-  .progress div{flex:1;height:5px;border-radius:99px;background:rgba(27,42,74,0.12);}
-  .progress div.done{background:var(--gold);}
-
-  .page-title{
-    font-size:clamp(1.7rem,4vw,2.4rem);
-    color:var(--ink);
-    font-weight:700;
-    margin-bottom:8px;
-  }
-  .page-sub{color:#5A5142;font-size:1rem;margin-bottom:44px;}
-
-  .card{
-    background:#fff;
-    border:1px solid rgba(27,42,74,0.08);
-    border-radius:16px;
-    padding:32px;
-    margin-bottom:28px;
-    box-shadow:0 6px 20px rgba(27,42,74,0.05);
-  }
-  .card-eyebrow{
-    display:inline-block;
-    font-size:0.75rem;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    color:var(--gold);
-    font-weight:700;
-    margin-bottom:6px;
-  }
-  .card h2{
-    font-size:1.3rem;
-    color:var(--ink);
-    margin-bottom:22px;
-    font-weight:700;
+export default async function handler(req, res) {
+  // نسمح فقط بطلبات POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  label.field-label{
-    display:block;
-    font-size:0.9rem;
-    font-weight:600;
-    color:var(--ink);
-    margin-bottom:8px;
-  }
-  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px;}
-  @media(max-width:600px){.field-row{grid-template-columns:1fr;}}
+  const { name, age, gender, hobby1, hobby2, lang } = req.body;
 
-  input[type="text"], input[type="number"], textarea{
-    width:100%;
-    padding:13px 16px;
-    border:1.5px solid rgba(27,42,74,0.15);
-    border-radius:10px;
-    font-size:0.98rem;
-    font-family:inherit;
-    color:var(--charcoal);
-    background:var(--parchment);
-    transition:border-color 0.2s ease;
-  }
-  input:focus, textarea:focus{
-    outline:none;
-    border-color:var(--gold);
-  }
-  textarea{resize:vertical;min-height:90px;}
-
-  .chip-group{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;}
-  .chip{
-    padding:10px 18px;
-    border-radius:999px;
-    border:1.5px solid rgba(27,42,74,0.18);
-    background:var(--parchment);
-    font-size:0.9rem;
-    font-weight:600;
-    color:var(--ink);
-    cursor:pointer;
-    transition:all 0.2s ease;
-    font-family:inherit;
-  }
-  .chip.selected{
-    background:var(--ink);
-    border-color:var(--ink);
-    color:var(--gold-bright);
-  }
-  .chip.shake{
-    animation:chipShake 0.35s ease;
-    border-color:var(--coral);
-  }
-  @keyframes chipShake{
-    0%,100%{transform:translateX(0);}
-    25%{transform:translateX(-4px);}
-    75%{transform:translateX(4px);}
+  // تحقق بسيط إنو البيانات المطلوبة موجودة
+  if (!name || !age || !hobby1 || !hobby2) {
+    return res.status(400).json({ error: 'بيانات ناقصة' });
   }
 
-  .option-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  @media(max-width:600px){.option-grid{grid-template-columns:1fr;}}
-  .option-card{
-    border:2px solid rgba(27,42,74,0.12);
-    border-radius:14px;
-    padding:22px;
-    cursor:pointer;
-    text-align:center;
-    transition:all 0.2s ease;
-    position:relative;
-  }
-  .option-card.selected{
-    border-color:var(--gold);
-    background:var(--parchment-warm);
-  }
-  .option-card .icon{
-    width:44px;height:44px;margin:0 auto 14px;
-    display:flex;align-items:center;justify-content:center;
-    border-radius:50%;background:var(--ink);color:var(--gold-bright);
-  }
-  .option-card h3{font-size:1rem;color:var(--ink);margin-bottom:6px;font-weight:700;}
-  .option-card p{font-size:0.85rem;color:#6A6152;}
-  .option-card input[type="radio"]{position:absolute;top:14px;inset-inline-end:14px;}
+  const isFemale = gender === 'female';
+  const genderNoteAr = isFemale
+    ? 'الطفلة أنثى — استخدم صيغة المؤنث في كل الأفعال والصفات المتعلقة بها (مثلاً: ذهبت، كانت شجاعة، وجدَت).'
+    : 'الطفل ذكر — استخدم صيغة المذكر في كل الأفعال والصفات المتعلقة به (مثلاً: ذهب، كان شجاعًا، وجدَ).';
+  const genderNoteHe = isFemale
+    ? 'הילדה היא בת — השתמשו בלשון נקבה בכל הפעלים והתארים הקשורים אליה.'
+    : 'הילד הוא בן — השתמשו בלשון זכר בכל הפעלים והתארים הקשורים אליו.';
+  const genderNoteEn = isFemale ? 'Use "she/her" pronouns throughout.' : 'Use "he/him" pronouns throughout.';
 
-  .upload-zone{
-    display:none;
-    margin-top:16px;
-    border:1.5px dashed rgba(27,42,74,0.3);
-    border-radius:12px;
-    padding:24px;
-    text-align:center;
-    color:#6A6152;
-    font-size:0.9rem;
-  }
-  .upload-zone.show{display:block;}
-  .upload-zone input{margin-top:10px;}
+  const prompts = {
+    ar: `اكتب قصة أطفال قصيرة ودافئة باللغة العربية الفصحى المبسطة (تناسب طفل عمره ${age} سنوات)، بطلها طفل اسمه "${name}"، وتدور أحداثها حول مغامرة تجمع بين "${hobby1}" و "${hobby2}". ${genderNoteAr}
+قسّم القصة إلى ٦ صفحات متتالية، كل صفحة فيها جملة أو جملتين بس (قصيرة ومناسبة لعمر الطفل)، بحيث تكون هناك بداية ووسط ونهاية سعيدة، والطفل شجاع وذكي، وتحمل القصة رسالة إيجابية بسيطة بالنهاية.
+لكل صفحة، اكتب أيضًا وصفًا قصيرًا بالإنجليزية للمشهد (scene) يُستخدم لاحقًا لتوليد رسمة كرتونية توضح الصفحة.
+أعطني فقط بصيغة JSON بدون أي نص إضافي أو علامات markdown:
+{"title": "عنوان القصة", "pages": [{"text": "نص الصفحة الأولى", "scene": "short English scene description"}, ...]}`,
+    en: `Write a short, warm children's story in English (suitable for a ${age}-year-old), starring a child named "${name}", about an adventure combining "${hobby1}" and "${hobby2}". ${genderNoteEn}
+Split the story into 6 sequential pages, each with just 1-2 short, age-appropriate sentences, with a clear beginning, middle, and happy ending, where the child is brave and clever, and the story carries a simple positive message at the end.
+For each page, also write a short scene description used later to generate a matching cartoon illustration.
+Reply ONLY in JSON with no extra text or markdown:
+{"title": "story title", "pages": [{"text": "page one text", "scene": "short scene description"}, ...]}`,
+    he: `כתבו סיפור ילדים קצר וחם בעברית (מתאים לילד בגיל ${age}), שגיבורו ילד בשם "${name}", על הרפתקה המשלבת "${hobby1}" ו-"${hobby2}". ${genderNoteHe}
+חלקו את הסיפור ל-6 עמודים רצופים, כל עמוד עם משפט או שניים קצרים בלבד, עם התחלה, אמצע וסוף שמח ברור, כשהילד אמיץ וחכם, והסיפור נושא מסר חיובי פשוט בסוף.
+לכל עמוד, כתבו גם תיאור קצר באנגלית של הסצנה לשימוש עתידי ביצירת איור מתאים.
+ענו רק בפורמט JSON ללא טקסט נוסף או markdown:
+{"title": "כותרת הסיפור", "pages": [{"text": "טקסט העמוד הראשון", "scene": "תיאור סצנה קצר"}, ...]}`
+  };
 
-  .package-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  @media(max-width:600px){.package-grid{grid-template-columns:1fr;}}
-  .package-card{
-    border:2px solid rgba(27,42,74,0.12);
-    border-radius:14px;
-    padding:24px;
-    cursor:pointer;
-    transition:all 0.2s ease;
-    position:relative;
-  }
-  .package-card.selected{border-color:var(--coral);background:var(--parchment-warm);}
-  .package-card .badge{
-    display:inline-block;font-size:0.7rem;font-weight:700;color:#fff;
-    background:var(--coral);padding:3px 10px;border-radius:999px;margin-bottom:10px;
-  }
-  .package-card h3{font-size:1.05rem;color:var(--ink);margin-bottom:6px;font-weight:700;}
-  .package-card p{font-size:0.85rem;color:#6A6152;line-height:1.6;}
+  const selectedPrompt = prompts[lang] || prompts.ar;
 
-  .submit-row{margin-top:36px;text-align:center;}
-  .btn-primary{
-    background:var(--coral);
-    color:#fff;
-    border:none;
-    padding:17px 46px;
-    border-radius:8px;
-    font-size:1.08rem;
-    font-weight:700;
-    cursor:pointer;
-    box-shadow:0 8px 24px rgba(228,87,46,0.35);
-    transition:transform 0.2s ease, box-shadow 0.2s ease;
-    font-family:inherit;
-  }
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(228,87,46,0.45);}
-  .helper-note{font-size:0.82rem;color:#8A8272;margin-top:14px;}
-
-  .story-loading{
-    display:none;text-align:center;padding:30px 0;color:var(--ink);font-size:0.95rem;font-weight:600;
-  }
-  .story-loading.show{display:block;}
-  .dots span{animation:blink 1.4s infinite both;font-size:1.4rem;}
-  .dots span:nth-child(2){animation-delay:0.2s;}
-  .dots span:nth-child(3){animation-delay:0.4s;}
-  @keyframes blink{0%,80%,100%{opacity:0.2;}40%{opacity:1;}}
-
-  .story-result{display:none;background:var(--ink-deep) !important;}
-  .story-result.show{display:block;}
-  .story-title{font-family:'Amiri',serif;font-size:1.4rem;color:var(--gold-bright);margin-bottom:16px;text-align:center;}
-  .story-text{font-size:1rem;line-height:2;color:var(--parchment);white-space:pre-wrap;}
-
-  button:focus-visible, input:focus-visible, .chip:focus-visible{
-    outline:3px solid var(--coral);
-    outline-offset:2px;
-  }
-</style>
-</head>
-<body>
-
-<header>
-  <div class="logo" data-i18n="logo">أميري <span>Amiri</span></div>
-  <div class="lang-switch">
-    <button data-lang="ar" class="active">عربي</button>
-    <button data-lang="en">EN</button>
-    <button data-lang="he">עברית</button>
-  </div>
-</header>
-
-<div class="wrap">
-  <div class="progress">
-    <div class="done"></div><div></div><div></div>
-  </div>
-  <h1 class="page-title display" data-i18n="page-title">احكيلنا عن طفلك</h1>
-  <p class="page-sub" data-i18n="page-sub">كل التفاصيل يلي بتكتبها هون بتصير جزء من قصته.</p>
-
-  <!-- Card 1: child details -->
-  <div class="card">
-    <span class="card-eyebrow" data-i18n="card1-eyebrow">الخطوة الأولى</span>
-    <h2 data-i18n="card1-title">من هو البطل؟</h2>
-
-    <div class="field-row">
-      <div>
-        <label class="field-label" data-i18n="label-name">اسم الطفل</label>
-        <input type="text" id="childName" data-i18n-placeholder="ph-name" placeholder="مثال: يوسف">
-      </div>
-      <div>
-        <label class="field-label" data-i18n="label-age">العمر</label>
-        <input type="number" id="childAge" min="1" max="14" data-i18n-placeholder="ph-age" placeholder="مثال: 6">
-      </div>
-    </div>
-
-    <label class="field-label" data-i18n="label-hobbies">هواياته (اختار حتى مغامرتين اثنتين)</label>
-    <div class="chip-group" id="hobbyChips">
-      <button type="button" class="chip" data-i18n="hobby-space">الفضاء</button>
-      <button type="button" class="chip" data-i18n="hobby-dino">الديناصورات</button>
-      <button type="button" class="chip" data-i18n="hobby-sea">البحر والغوص</button>
-      <button type="button" class="chip" data-i18n="hobby-sport">الرياضة</button>
-      <button type="button" class="chip" data-i18n="hobby-art">الرسم والفن</button>
-      <button type="button" class="chip" data-i18n="hobby-music">الموسيقى</button>
-      <button type="button" class="chip" data-i18n="hobby-animals">الحيوانات</button>
-      <button type="button" class="chip" data-i18n="hobby-adventure">المغامرات</button>
-    </div>
-
-    <label class="field-label" style="margin-top:20px;" data-i18n="label-extra">شي إضافي بدك تحكيه عنه؟ (اختياري)</label>
-    <textarea id="extraDetails" data-i18n-placeholder="ph-extra" placeholder="مثلاً: بيحب يكون شجاع، أو بيحب أخته الصغيرة..."></textarea>
-  </div>
-
-  <!-- Card 2: illustration style -->
-  <div class="card">
-    <span class="card-eyebrow" data-i18n="card2-eyebrow">الخطوة الثانية</span>
-    <h2 data-i18n="card2-title">شو شكله بالقصة؟</h2>
-
-    <div class="option-grid">
-      <label class="option-card selected" id="optCartoon">
-        <input type="radio" name="lookType" checked style="display:none;">
-        <div class="icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="5" fill="currentColor"/><path d="M4 22c0-4.4 3.6-7 8-7s8 2.6 8 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-        </div>
-        <h3 data-i18n="opt-cartoon-title">رسمة كرتونية</h3>
-        <p data-i18n="opt-cartoon-body">نختار له ستايل رسم يشبه وصفك إله</p>
-      </label>
-      <label class="option-card" id="optUpload">
-        <input type="radio" name="lookType" style="display:none;">
-        <div class="icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 16V4M12 4L7 9M12 4l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
-        <h3 data-i18n="opt-upload-title">ارفع صورته</h3>
-        <p data-i18n="opt-upload-body">وحوّلها لرسمة كرتونية بأسلوب القصة</p>
-      </label>
-    </div>
-
-    <div class="upload-zone" id="uploadZone">
-      <p data-i18n="upload-text">اسحب صورة هون أو اختارها من جهازك</p>
-      <input type="file" accept="image/*">
-    </div>
-  </div>
-
-  <!-- Card 3: package -->
-  <div class="card">
-    <span class="card-eyebrow" data-i18n="card3-eyebrow">الخطوة الثالثة</span>
-    <h2 data-i18n="card3-title">كيف بدك تستلم القصة؟</h2>
-
-    <div class="package-grid">
-      <label class="package-card selected" id="pkgDigital">
-        <input type="radio" name="pkg" checked style="display:none;">
-        <span class="badge" data-i18n="pkg-digital-badge">الأسرع</span>
-        <h3 data-i18n="pkg-digital-title">نسخة رقمية</h3>
-        <p data-i18n="pkg-digital-body">تقراها فورًا أونلاين، وتقدر تحمّلها كـ PDF.</p>
-      </label>
-      <label class="package-card" id="pkgPrint">
-        <input type="radio" name="pkg" style="display:none;">
-        <span class="badge" data-i18n="pkg-print-badge">هدية</span>
-        <h3 data-i18n="pkg-print-title">نسخة مطبوعة</h3>
-        <p data-i18n="pkg-print-body">كتاب حقيقي بغلاف فاخر، بوصلك بالبريد.</p>
-      </label>
-    </div>
-  </div>
-
-  <div class="submit-row">
-    <button class="btn-primary" id="genBtn" data-i18n="submit-btn">أنشئ قصة طفلك</button>
-    <p class="helper-note" data-i18n="submit-note">ما رح ننشر أي معلومة أو صورة عن طفلك — كل شي خاص وآمن.</p>
-  </div>
-
-  <div class="story-loading" id="loading">
-    <span data-i18n="loading-text">جاري نسج المغامرة</span>
-    <span class="dots"><span>.</span><span>.</span><span>.</span></span>
-  </div>
-
-  <div class="story-result card" id="storyResult">
-    <div class="story-title" id="storyTitle"></div>
-    <div class="story-text" id="storyText"></div>
-  </div>
-</div>
-
-<script>
-const translations = {
-  ar: {
-    logo: 'أميري <span>Amiri</span>',
-    'page-title': 'احكيلنا عن طفلك',
-    'page-sub': 'كل التفاصيل يلي بتكتبها هون بتصير جزء من قصته.',
-    'card1-eyebrow': 'الخطوة الأولى',
-    'card1-title': 'من هو البطل؟',
-    'label-name': 'اسم الطفل',
-    'ph-name': 'مثال: يوسف',
-    'label-age': 'العمر',
-    'ph-age': 'مثال: 6',
-    'label-hobbies': 'هواياته (اختار حتى مغامرتين اثنتين)',
-    'hobby-space': 'الفضاء','hobby-dino': 'الديناصورات','hobby-sea': 'البحر والغوص','hobby-sport': 'الرياضة',
-    'hobby-art': 'الرسم والفن','hobby-music': 'الموسيقى','hobby-animals': 'الحيوانات','hobby-adventure': 'المغامرات',
-    'label-extra': 'شي إضافي بدك تحكيه عنه؟ (اختياري)',
-    'ph-extra': 'مثلاً: بيحب يكون شجاع، أو بيحب أخته الصغيرة...',
-    'card2-eyebrow': 'الخطوة الثانية',
-    'card2-title': 'شو شكله بالقصة؟',
-    'opt-cartoon-title': 'رسمة كرتونية',
-    'opt-cartoon-body': 'نختار له ستايل رسم يشبه وصفك إله',
-    'opt-upload-title': 'ارفع صورته',
-    'opt-upload-body': 'وحوّلها لرسمة كرتونية بأسلوب القصة',
-    'upload-text': 'اسحب صورة هون أو اختارها من جهازك',
-    'card3-eyebrow': 'الخطوة الثالثة',
-    'card3-title': 'كيف بدك تستلم القصة؟',
-    'pkg-digital-badge': 'الأسرع','pkg-digital-title': 'نسخة رقمية','pkg-digital-body': 'تقراها فورًا أونلاين، وتقدر تحمّلها كـ PDF.',
-    'pkg-print-badge': 'هدية','pkg-print-title': 'نسخة مطبوعة','pkg-print-body': 'كتاب حقيقي بغلاف فاخر، بوصلك بالبريد.',
-    'submit-btn': 'أنشئ قصة طفلك',
-    'submit-note': 'ما رح ننشر أي معلومة أو صورة عن طفلك — كل شي خاص وآمن.',
-    'loading-text': 'جاري نسج المغامرة'
-  },
-  en: {
-    logo: 'Amiri <span>أميري</span>',
-    'page-title': 'Tell Us About Your Child',
-    'page-sub': 'Everything you write here becomes part of their story.',
-    'card1-eyebrow': 'Step One',
-    'card1-title': 'Who is the hero?',
-    'label-name': "Child's Name",
-    'ph-name': 'e.g. Youssef',
-    'label-age': 'Age',
-    'ph-age': 'e.g. 6',
-    'label-hobbies': 'Hobbies (choose up to two adventures)',
-    'hobby-space': 'Space','hobby-dino': 'Dinosaurs','hobby-sea': 'Ocean & Diving','hobby-sport': 'Sports',
-    'hobby-art': 'Art & Drawing','hobby-music': 'Music','hobby-animals': 'Animals','hobby-adventure': 'Adventure',
-    'label-extra': 'Anything else to share? (optional)',
-    'ph-extra': 'e.g. loves being brave, adores their little sister...',
-    'card2-eyebrow': 'Step Two',
-    'card2-title': 'How should they look?',
-    'opt-cartoon-title': 'Cartoon Illustration',
-    'opt-cartoon-body': "We'll craft a style that matches your description",
-    'opt-upload-title': 'Upload a Photo',
-    'opt-upload-body': "We'll turn it into the story's illustration style",
-    'upload-text': 'Drag a photo here or choose one from your device',
-    'card3-eyebrow': 'Step Three',
-    'card3-title': 'How would you like to receive it?',
-    'pkg-digital-badge': 'Fastest','pkg-digital-title': 'Digital Copy','pkg-digital-body': 'Read it instantly online, or download as a PDF.',
-    'pkg-print-badge': 'Gift','pkg-print-title': 'Printed Copy','pkg-print-body': 'A real book with a premium cover, delivered to your door.',
-    'submit-btn': "Create Your Child's Story",
-    'submit-note': "We never share your child's information or photo — everything stays private and secure.",
-    'loading-text': 'Weaving the adventure'
-  },
-  he: {
-    logo: 'אמירי <span>Amiri</span>',
-    'page-title': 'ספרו לנו על הילד שלכם',
-    'page-sub': 'כל מה שתכתבו כאן יהפוך לחלק מהסיפור שלו.',
-    'card1-eyebrow': 'שלב ראשון',
-    'card1-title': 'מי הגיבור?',
-    'label-name': 'שם הילד',
-    'ph-name': 'לדוגמה: יוסף',
-    'label-age': 'גיל',
-    'ph-age': 'לדוגמה: 6',
-    'label-hobbies': 'תחביבים (בחרו עד שתי הרפתקאות)',
-    'hobby-space': 'חלל','hobby-dino': 'דינוזאורים','hobby-sea': 'ים וצלילה','hobby-sport': 'ספורט',
-    'hobby-art': 'ציור ואמנות','hobby-music': 'מוזיקה','hobby-animals': 'בעלי חיים','hobby-adventure': 'הרפתקאות',
-    'label-extra': 'משהו נוסף שתרצו לספר? (אופציונלי)',
-    'ph-extra': 'לדוגמה: אוהב להיות אמיץ, מעריץ את אחותו הקטנה...',
-    'card2-eyebrow': 'שלב שני',
-    'card2-title': 'איך הוא ייראה בסיפור?',
-    'opt-cartoon-title': 'איור מצויר',
-    'opt-cartoon-body': 'ניצור סגנון שמתאים לתיאור שלכם',
-    'opt-upload-title': 'העלאת תמונה',
-    'opt-upload-body': 'נהפוך אותה לאיור בסגנון הסיפור',
-    'upload-text': 'גררו תמונה לכאן או בחרו מהמכשיר',
-    'card3-eyebrow': 'שלב שלישי',
-    'card3-title': 'איך תרצו לקבל את הסיפור?',
-    'pkg-digital-badge': 'המהיר ביותר','pkg-digital-title': 'עותק דיגיטלי','pkg-digital-body': 'קראו מיד אונליין, או הורידו כ-PDF.',
-    'pkg-print-badge': 'מתנה','pkg-print-title': 'עותק מודפס','pkg-print-body': 'ספר אמיתי בכריכה מפוארת, יגיע עד הבית.',
-    'submit-btn': 'צרו את הסיפור של הילד שלכם',
-    'submit-note': 'לעולם לא נשתף מידע או תמונה של הילד שלכם — הכל נשאר פרטי ובטוח.',
-    'loading-text': 'טווים את ההרפתקה'
-  }
-};
-
-function setLang(lang){
-  const dir = lang === 'en' ? 'ltr' : 'rtl';
-  document.documentElement.lang = lang;
-  document.documentElement.dir = dir;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const key = el.getAttribute('data-i18n');
-    if(translations[lang][key]) el.innerHTML = translations[lang][key];
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
-    const key = el.getAttribute('data-i18n-placeholder');
-    if(translations[lang][key]) el.placeholder = translations[lang][key];
-  });
-  document.querySelectorAll('.lang-switch button').forEach(btn=>{
-    btn.classList.toggle('active', btn.dataset.lang === lang);
-  });
-}
-document.querySelectorAll('.lang-switch button').forEach(btn=>{
-  btn.addEventListener('click', ()=> setLang(btn.dataset.lang));
-});
-
-// hobby chip toggle (max 2 selections)
-const MAX_HOBBIES = 2;
-const hobbyChips = document.querySelectorAll('#hobbyChips .chip');
-hobbyChips.forEach(chip=>{
-  chip.addEventListener('click', ()=>{
-    const selectedCount = document.querySelectorAll('#hobbyChips .chip.selected').length;
-    if(chip.classList.contains('selected')){
-      chip.classList.remove('selected');
-    } else if(selectedCount < MAX_HOBBIES){
-      chip.classList.add('selected');
-    } else {
-      chip.classList.add('shake');
-      setTimeout(()=> chip.classList.remove('shake'), 350);
-    }
-  });
-});
-
-// look type toggle
-const optCartoon = document.getElementById('optCartoon');
-const optUpload = document.getElementById('optUpload');
-const uploadZone = document.getElementById('uploadZone');
-optCartoon.addEventListener('click', ()=>{
-  optCartoon.classList.add('selected');
-  optUpload.classList.remove('selected');
-  uploadZone.classList.remove('show');
-});
-optUpload.addEventListener('click', ()=>{
-  optUpload.classList.add('selected');
-  optCartoon.classList.remove('selected');
-  uploadZone.classList.add('show');
-});
-
-// package toggle
-const pkgDigital = document.getElementById('pkgDigital');
-const pkgPrint = document.getElementById('pkgPrint');
-pkgDigital.addEventListener('click', ()=>{
-  pkgDigital.classList.add('selected');
-  pkgPrint.classList.remove('selected');
-});
-pkgPrint.addEventListener('click', ()=>{
-  pkgPrint.classList.add('selected');
-  pkgDigital.classList.remove('selected');
-});
-
-// generate story via backend
-document.getElementById('genBtn').addEventListener('click', async ()=>{
-  const name = document.getElementById('childName').value;
-  const age = document.getElementById('childAge').value;
-  const selectedHobbies = Array.from(document.querySelectorAll('#hobbyChips .chip.selected')).map(c => c.textContent);
-
-  if(!name || !age){
-    alert(document.documentElement.lang === 'en' ? 'Please fill in the name and age.' : (document.documentElement.lang === 'he' ? 'נא למלא שם וגיל.' : 'الرجاء تعبئة الاسم والعمر.'));
-    return;
-  }
-  if(selectedHobbies.length < 2){
-    alert(document.documentElement.lang === 'en' ? 'Please choose two adventures.' : (document.documentElement.lang === 'he' ? 'נא לבחור שתי הרפתקאות.' : 'الرجاء اختيار مغامرتين.'));
-    return;
-  }
-
-  const btn = document.getElementById('genBtn');
-  const loading = document.getElementById('loading');
-  const result = document.getElementById('storyResult');
-  const lang = document.documentElement.lang;
-
-  btn.disabled = true;
-  loading.classList.add('show');
-  result.classList.remove('show');
-
-  try{
-    const response = await fetch('/api/generate-story', {
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.ANTHROPIC_API_KEY, // المفتاح مخبّى هون، آمن، ما حدا شايفه
+        'anthropic-version': '2023-06-01'
+      },
       body: JSON.stringify({
-        name, age,
-        hobby1: selectedHobbies[0],
-        hobby2: selectedHobbies[1],
-        lang
+        model: 'claude-sonnet-5',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: selectedPrompt }]
       })
     });
+
     const data = await response.json();
-    if(data.error) throw new Error(data.error);
 
-    document.getElementById('storyTitle').textContent = data.title;
-    document.getElementById('storyText').textContent = data.story;
-    document.getElementById('storyTitle').style.direction = lang === 'en' ? 'ltr' : 'rtl';
-    document.getElementById('storyText').style.direction = lang === 'en' ? 'ltr' : 'rtl';
-    result.classList.add('show');
-    result.scrollIntoView({behavior:'smooth', block:'start'});
-  } catch(err){
-    console.error(err);
-    document.getElementById('storyTitle').textContent = '—';
-    document.getElementById('storyText').textContent = err.message || 'صار في خطأ، جرّب مرة تانية.';
-    result.classList.add('show');
-  } finally {
-    loading.classList.remove('show');
-    btn.disabled = false;
+    if (!response.ok) {
+      console.error('Anthropic API error:', data);
+      return res.status(500).json({ error: 'خطأ من الذكاء الاصطناعي: ' + (data.error?.message || JSON.stringify(data)) });
+    }
+
+    const raw = data.content.map(block => block.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    return res.status(200).json(parsed);
+  } catch (error) {
+    console.error('Story generation error:', error);
+    return res.status(500).json({ error: 'خطأ تقني: ' + error.message });
   }
-});
-</script>
-
-</body>
-</html>
+}

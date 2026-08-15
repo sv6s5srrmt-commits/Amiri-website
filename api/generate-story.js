@@ -1,23 +1,45 @@
 // ملف: api/generate-story.js
+// هاد الملف لازم يكون بمجلد اسمه "api" بجذر مشروعك على Vercel
+// مثال المسار الكامل: my-amiri-site/api/generate-story.js
 
 export default async function handler(req, res) {
+  // نسمح فقط بطلبات POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, age, hobby1, hobby2, lang } = req.body;
+  const { name, age, gender, hobby1, hobby2, lang } = req.body;
 
+  // تحقق بسيط إنو البيانات المطلوبة موجودة
   if (!name || !age || !hobby1 || !hobby2) {
     return res.status(400).json({ error: 'بيانات ناقصة' });
   }
 
+  const isFemale = gender === 'female';
+  const genderNoteAr = isFemale
+    ? 'الطفلة أنثى — استخدم صيغة المؤنث في كل الأفعال والصفات المتعلقة بها (مثلاً: ذهبت، كانت شجاعة، وجدَت).'
+    : 'الطفل ذكر — استخدم صيغة المذكر في كل الأفعال والصفات المتعلقة به (مثلاً: ذهب، كان شجاعًا، وجدَ).';
+  const genderNoteHe = isFemale
+    ? 'הילדה היא בת — השתמשו בלשון נקבה בכל הפעלים והתארים הקשורים אליה.'
+    : 'הילד הוא בן — השתמשו בלשון זכר בכל הפעלים והתארים הקשורים אליו.';
+  const genderNoteEn = isFemale ? 'Use "she/her" pronouns throughout.' : 'Use "he/him" pronouns throughout.';
+
   const prompts = {
-    ar: `اكتب قصة أطفال قصيرة ودافئة باللغة العربية الفصحى المبسطة (تناسب طفل عمره ${age} سنوات)، بطلها طفل اسمه "${name}"، وتدور أحداثها حول مغامرة تجمع بين "${hobby1}" و "${hobby2}". يجب أن تكون بين 150-220 كلمة، وفيها بداية ووسط ونهاية سعيدة، والطفل شجاع وذكي، وتحمل رسالة إيجابية بسيطة بالنهاية.
-أعطني فقط بصيغة JSON بدون أي نص إضافي أو علامات markdown: {"title": "عنوان القصة", "story": "نص القصة كاملاً"}`,
-    en: `Write a short, warm children's story in English (suitable for a ${age}-year-old), starring a child named "${name}", about an adventure combining "${hobby1}" and "${hobby2}". It should be 150-220 words, with a beginning, middle, and happy ending, and the child should be brave and clever, with a simple positive message at the end.
-Reply ONLY in JSON with no extra text or markdown: {"title": "story title", "story": "the full story text"}`,
-    he: `כתבו סיפור ילדים קצר וחם בעברית (מתאים לילד בגיל ${age}), שגיבורו ילד בשם "${name}", על הרפתקה המשלבת "${hobby1}" ו-"${hobby2}". הסיפור צריך להיות בין 150-220 מילים, עם התחלה, אמצע וסוף שמח, והילד אמור להיות אמיץ וחכם, עם מסר חיובי פשוט בסוף.
-ענו רק בפורמט JSON ללא טקסט נוסף או markdown: {"title": "כותרת הסיפור", "story": "טקסט הסיפור המלא"}`
+    ar: `اكتب قصة أطفال قصيرة ودافئة باللغة العربية الفصحى المبسطة (تناسب طفل عمره ${age} سنوات)، بطلها طفل اسمه "${name}"، وتدور أحداثها حول مغامرة تجمع بين "${hobby1}" و "${hobby2}". ${genderNoteAr}
+قسّم القصة إلى ٦ صفحات متتالية، كل صفحة فيها جملة أو جملتين بس (قصيرة ومناسبة لعمر الطفل)، بحيث تكون هناك بداية ووسط ونهاية سعيدة، والطفل شجاع وذكي، وتحمل القصة رسالة إيجابية بسيطة بالنهاية.
+لكل صفحة، اكتب أيضًا وصفًا قصيرًا بالإنجليزية للمشهد (scene) يُستخدم لاحقًا لتوليد رسمة كرتونية توضح الصفحة.
+أعطني فقط بصيغة JSON بدون أي نص إضافي أو علامات markdown:
+{"title": "عنوان القصة", "pages": [{"text": "نص الصفحة الأولى", "scene": "short English scene description"}, ...]}`,
+    en: `Write a short, warm children's story in English (suitable for a ${age}-year-old), starring a child named "${name}", about an adventure combining "${hobby1}" and "${hobby2}". ${genderNoteEn}
+Split the story into 6 sequential pages, each with just 1-2 short, age-appropriate sentences, with a clear beginning, middle, and happy ending, where the child is brave and clever, and the story carries a simple positive message at the end.
+For each page, also write a short scene description used later to generate a matching cartoon illustration.
+Reply ONLY in JSON with no extra text or markdown:
+{"title": "story title", "pages": [{"text": "page one text", "scene": "short scene description"}, ...]}`,
+    he: `כתבו סיפור ילדים קצר וחם בעברית (מתאים לילד בגיל ${age}), שגיבורו ילד בשם "${name}", על הרפתקה המשלבת "${hobby1}" ו-"${hobby2}". ${genderNoteHe}
+חלקו את הסיפור ל-6 עמודים רצופים, כל עמוד עם משפט או שניים קצרים בלבד, עם התחלה, אמצע וסוף שמח ברור, כשהילד אמיץ וחכם, והסיפור נושא מסר חיובי פשוט בסוף.
+לכל עמוד, כתבו גם תיאור קצר באנגלית של הסצנה לשימוש עתידי ביצירת איור מתאים.
+ענו רק בפורמט JSON ללא טקסט נוסף או markdown:
+{"title": "כותרת הסיפור", "pages": [{"text": "טקסט העמוד הראשון", "scene": "תיאור סצנה קצר"}, ...]}`
   };
 
   const selectedPrompt = prompts[lang] || prompts.ar;
@@ -27,7 +49,7 @@ Reply ONLY in JSON with no extra text or markdown: {"title": "story title", "sto
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'x-api-key': process.env.ANTHROPIC_API_KEY, // المفتاح مخبّى هون، آمن، ما حدا شايفه
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
@@ -54,4 +76,3 @@ Reply ONLY in JSON with no extra text or markdown: {"title": "story title", "sto
     return res.status(500).json({ error: 'خطأ تقني: ' + error.message });
   }
 }
-

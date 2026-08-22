@@ -26,17 +26,17 @@ export default async function handler(req, res) {
 
   const prompts = {
     ar: `اكتب قصة أطفال قصيرة ودافئة باللغة العربية الفصحى المبسطة (تناسب طفل عمره ${age} سنوات)، بطلها طفل اسمه "${name}"، وتدور أحداثها حول مغامرة تجمع بين "${hobby1}" و "${hobby2}". ${genderNoteAr}
-قسّم القصة إلى ٦ صفحات متتالية، كل صفحة فيها جملة أو جملتين بس (قصيرة ومناسبة لعمر الطفل)، بحيث تكون هناك بداية ووسط ونهاية سعيدة، والطفل شجاع وذكي، وتحمل القصة رسالة إيجابية بسيطة بالنهاية.
+قسّم القصة إلى ١٥ صفحة متتالية، كل صفحة فيها جملة أو جملتين بس (قصيرة ومناسبة لعمر الطفل)، بحيث تكون هناك بداية ووسط ونهاية سعيدة، والطفل شجاع وذكي، وتحمل القصة رسالة إيجابية بسيطة بالنهاية.
 لكل صفحة، اكتب أيضًا وصفًا قصيرًا بالإنجليزية للمشهد (scene) يُستخدم لاحقًا لتوليد رسمة كرتونية توضح الصفحة.
 أعطني فقط بصيغة JSON بدون أي نص إضافي أو علامات markdown:
 {"title": "عنوان القصة", "pages": [{"text": "نص الصفحة الأولى", "scene": "short English scene description"}, ...]}`,
     en: `Write a short, warm children's story in English (suitable for a ${age}-year-old), starring a child named "${name}", about an adventure combining "${hobby1}" and "${hobby2}". ${genderNoteEn}
-Split the story into 6 sequential pages, each with just 1-2 short, age-appropriate sentences, with a clear beginning, middle, and happy ending, where the child is brave and clever, and the story carries a simple positive message at the end.
+Split the story into 15 sequential pages, each with just 1-2 short, age-appropriate sentences, with a clear beginning, middle, and happy ending, where the child is brave and clever, and the story carries a simple positive message at the end.
 For each page, also write a short scene description used later to generate a matching cartoon illustration.
 Reply ONLY in JSON with no extra text or markdown:
 {"title": "story title", "pages": [{"text": "page one text", "scene": "short scene description"}, ...]}`,
     he: `כתבו סיפור ילדים קצר וחם בעברית (מתאים לילד בגיל ${age}), שגיבורו ילד בשם "${name}", על הרפתקה המשלבת "${hobby1}" ו-"${hobby2}". ${genderNoteHe}
-חלקו את הסיפור ל-6 עמודים רצופים, כל עמוד עם משפט או שניים קצרים בלבד, עם התחלה, אמצע וסוף שמח ברור, כשהילד אמיץ וחכם, והסיפור נושא מסר חיובי פשוט בסוף.
+חלקו את הסיפור ל-15 עמודים רצופים, כל עמוד עם משפט או שניים קצרים בלבד, עם התחלה, אמצע וסוף שמח ברור, כשהילד אמיץ וחכם, והסיפור נושא מסר חיובי פשוט בסוף.
 לכל עמוד, כתבו גם תיאור קצר באנגלית של הסצנה לשימוש עתידי ביצירת איור מתאים.
 ענו רק בפורמט JSON ללא טקסט נוסף או markdown:
 {"title": "כותרת הסיפור", "pages": [{"text": "טקסט העמוד הראשון", "scene": "תיאור סצנה קצר"}, ...]}`
@@ -54,7 +54,7 @@ Reply ONLY in JSON with no extra text or markdown:
       },
       body: JSON.stringify({
         model: 'claude-sonnet-5',
-        max_tokens: 1000,
+        max_tokens: 2000,
         messages: [{ role: 'user', content: selectedPrompt }]
       })
     });

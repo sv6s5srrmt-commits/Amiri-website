@@ -595,47 +595,22 @@ pkgPrint.addEventListener('click', ()=>{
 let currentBook = null;
 let currentPage = 0;
 let pageImages = {}; // كاش للصور المولّدة، عشان ما نعيد التوليد لما نرجع لنفس الصفحة
-const FREE_PAGES = 2; // عدد الصفحات المجانية للمعاينة
+const FREE_PAGES = 3; // عدد الصفحات المجانية للمعاينة
 
-async function loadIllustration(pageIndex, scene, gender){
+function showIllustrationNotice(childName){
   const loadingEl = document.getElementById('illustrationLoading');
   const imgEl = document.getElementById('illustrationImg');
-
-  if(pageImages[pageIndex]){
-    imgEl.src = pageImages[pageIndex];
-    imgEl.style.display = 'block';
-    loadingEl.style.display = 'none';
-    return;
-  }
+  const lang = document.documentElement.lang;
 
   imgEl.style.display = 'none';
   loadingEl.style.display = 'block';
-  loadingEl.textContent = '🎨';
 
-  try{
-    const res = await fetch('/api/generate-image', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ scene, gender })
-    });
-    const data = await res.json();
-    if(data.error) throw new Error(data.error);
-
-    pageImages[pageIndex] = data.imageUrl;
-    // تأكد لسا نفس الصفحة مفتوحة (المستخدم ما تنقل بالأثناء)
-    if(currentPage === pageIndex){
-      imgEl.src = data.imageUrl;
-      imgEl.onload = ()=>{
-        imgEl.style.display = 'block';
-        loadingEl.style.display = 'none';
-      };
-    }
-  } catch(err){
-    console.error('Illustration error:', err);
-    if(currentPage === pageIndex){
-      loadingEl.textContent = '🖼️';
-    }
-  }
+  const notice = {
+    ar: `🎨<br><span style="font-size:0.7rem;color:#8A8272;display:block;margin-top:8px;line-height:1.5;">رسمة ${childName || 'طفلك'} الخاصة بتصير جاهزة فور إتمام الشراء</span>`,
+    en: `🎨<br><span style="font-size:0.7rem;color:#8A8272;display:block;margin-top:8px;line-height:1.5;">${childName || 'Your child'}'s custom illustration will be ready right after purchase</span>`,
+    he: `🎨<br><span style="font-size:0.7rem;color:#8A8272;display:block;margin-top:8px;line-height:1.5;">האיור המותאם אישית של ${childName || 'הילד שלכם'} יהיה מוכן מיד לאחר הרכישה</span>`
+  };
+  loadingEl.innerHTML = notice[lang] || notice.ar;
 }
 
 function renderBookPage(){
@@ -645,21 +620,20 @@ function renderBookPage(){
   const bookPageEl = document.querySelector('.book-page');
 
   if(currentPage < FREE_PAGES){
-    // صفحة معاينة عادية
+    // صفحة معاينة عادية — بدون توليد رسمة فعلية، بس إشعار إنها بتجهز بعد الشراء
     const page = currentBook.pages[currentPage];
     bookPageEl.classList.remove('locked');
     document.getElementById('bookIllustration').style.display = 'flex';
     document.getElementById('storyTitle').textContent = currentPage === 0 ? currentBook.title : `${currentBook.title} — ${currentPage + 1}/${total}`;
     document.getElementById('storyText').textContent = page.text;
-    const sceneDesc = page.scene || page.text;
-    loadIllustration(currentPage, sceneDesc, currentBook.gender);
+    showIllustrationNotice(currentBook.childName || '');
   } else {
     // صفحة مقفلة — تحفيز للشراء
     bookPageEl.classList.add('locked');
     document.getElementById('bookIllustration').style.display = 'none';
     const lockTitle = { ar: 'القصة كاملة بانتظارك 📖', en: 'The full story awaits 📖', he: 'הסיפור המלא מחכה לכם 📖' };
     const lockBody = {
-      ar: `باقي ${total - FREE_PAGES} صفحات من مغامرة ${currentBook.title.split(' ').slice(-1)[0] || 'طفلك'} — اشترِ القصة كاملة لتكملتها معه.`,
+      ar: `باقي ${total - FREE_PAGES} صفحة من مغامرة ${currentBook.title.split(' ').slice(-1)[0] || 'طفلك'} — اشترِ القصة كاملة لتكملتها معه.`,
       en: `${total - FREE_PAGES} more pages of the adventure are waiting — purchase the full story to continue together.`,
       he: `נשארו עוד ${total - FREE_PAGES} עמודים בהרפתקה — רכשו את הסיפור המלא כדי להמשיך יחד.`
     };
@@ -737,6 +711,7 @@ document.getElementById('genBtn').addEventListener('click', async ()=>{
 
     currentBook = data;
     currentBook.gender = document.getElementById('childGender').value;
+    currentBook.childName = name;
     currentPage = 0;
     pageImages = {};
     renderBookPage();

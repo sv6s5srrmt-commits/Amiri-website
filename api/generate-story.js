@@ -2,6 +2,10 @@
 // هاد الملف لازم يكون بمجلد اسمه "api" بجذر مشروعك على Vercel
 // مثال المسار الكامل: my-amiri-site/api/generate-story.js
 
+export const config = {
+  maxDuration: 60, // نمهل الطلب لحد ٦٠ ثانية عشان يخلص توليد الـ ١٥ صفحة
+};
+
 export default async function handler(req, res) {
   // نسمح فقط بطلبات POST
   if (req.method !== 'POST') {

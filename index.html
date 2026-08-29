@@ -22,6 +22,8 @@
 
   body{
     background:var(--parchment);
+    background-image:radial-gradient(rgba(201,162,39,0.12) 1.5px, transparent 1.5px);
+    background-size:28px 28px;
     color:var(--charcoal);
     font-family:'Noto Sans Arabic','Noto Sans',sans-serif;
     overflow-x:hidden;
@@ -139,6 +141,14 @@
     font-family:inherit;
   }
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(228,87,46,0.45);}
+  .hero .btn-primary{animation:pulseGlow 3s ease-in-out infinite;}
+  @keyframes pulseGlow{
+    0%,100%{box-shadow:0 8px 24px rgba(228,87,46,0.35);}
+    50%{box-shadow:0 8px 30px rgba(228,87,46,0.55);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero .btn-primary{animation:none;}
+  }
 
   .btn-secondary{
     background:transparent;
@@ -154,43 +164,184 @@
   }
   .btn-secondary:hover{background:var(--ink);color:var(--parchment);}
 
-  /* ---------- Storybook frame illustration ---------- */
+  /* ---------- Animated hero composition ---------- */
   .stage{
     position:relative;
-    max-width:640px;
-    margin:64px auto 0;
-    padding:36px;
-    background:var(--ink);
-    border-radius:20px;
-    box-shadow:0 30px 60px rgba(27,42,74,0.25);
-  }
-  .stage::before, .stage::after{
-    content:'';
-    position:absolute;
-    inset:12px;
-    border:1.5px solid rgba(201,162,39,0.5);
-    border-radius:12px;
-    pointer-events:none;
-  }
-  .stage-inner{
-    background:var(--parchment-warm);
-    border-radius:8px;
-    padding:40px 24px;
+    max-width:560px;
+    margin:70px auto 0;
+    min-height:420px;
     display:flex;
     align-items:center;
     justify-content:center;
-    min-height:220px;
   }
-  .hero-figure{
-    width:100%;
-    max-width:420px;
-    height:auto;
+
+  .blob{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(0px);
   }
+  .blob-mint{
+    width:320px;height:320px;
+    background:radial-gradient(circle at 35% 30%, #BFEAE0, #8FD4C4);
+    top:8%;
+    left:50%;
+    transform:translateX(-50%);
+    animation:floatSlow 7s ease-in-out infinite;
+  }
+  .blob-gold{
+    width:110px;height:110px;
+    background:radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold));
+    bottom:10%;
+    left:6%;
+    animation:floatSlow 6s ease-in-out infinite reverse;
+  }
+  .blob-coral{
+    width:70px;height:70px;
+    background:radial-gradient(circle at 35% 30%, #FF9C7A, var(--coral));
+    top:6%;
+    right:8%;
+    animation:floatSlow 5.5s ease-in-out infinite;
+  }
+
+  .stage-figure{
+    position:relative;
+    z-index:2;
+    width:72%;
+    max-width:300px;
+    border-radius:24px;
+    object-fit:cover;
+    aspect-ratio:3/4;
+    filter:drop-shadow(0 18px 28px rgba(27,42,74,0.3));
+    animation:bob 4.5s ease-in-out infinite;
+  }
+
+  .mini-avatar{
+    position:absolute;
+    z-index:3;
+    width:92px;height:92px;
+    border-radius:50%;
+    overflow:hidden;
+    border:4px solid #fff;
+    box-shadow:0 12px 20px rgba(27,42,74,0.18);
+    bottom:6%;
+    right:2%;
+    animation:floatSlow 5s ease-in-out infinite 0.4s;
+  }
+  .mini-avatar img{width:100%;height:100%;object-fit:cover;object-position:top center;}
+
+  .sparkle-deco{
+    position:absolute;
+    z-index:3;
+    animation:spin 9s linear infinite;
+  }
+  .sparkle-1{top:2%; left:2%; width:26px; height:26px;}
+  .sparkle-2{bottom:2%; left:32%; width:18px; height:18px; animation-duration:6s; animation-direction:reverse;}
+
+  @keyframes floatSlow{
+    0%,100%{transform:translateY(0) translateX(-50%);}
+    50%{transform:translateY(-14px) translateX(-50%);}
+  }
+  .blob-gold, .blob-coral, .mini-avatar{
+    /* override translateX for non-centered blobs */
+  }
+  .blob-gold{animation-name:floatSlowLeft;}
+  .blob-coral{animation-name:floatSlowRight;}
+  .mini-avatar{animation-name:floatSlowRight;}
+  @keyframes floatSlowLeft{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+  }
+  @keyframes floatSlowRight{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(12px);}
+  }
+  @keyframes bob{
+    0%,100%{transform:translateY(0) rotate(-1.5deg);}
+    50%{transform:translateY(-16px) rotate(1.5deg);}
+  }
+  @keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .blob-mint, .blob-gold, .blob-coral, .stage-figure, .mini-avatar, .sparkle-deco{
+      animation:none !important;
+    }
+  }
+
   .stage-caption{
-    color:var(--gold-bright);
-    font-size:0.85rem;
-    margin-top:18px;
-    letter-spacing:0.5px;
+    max-width:420px;
+    margin:8px auto 0;
+    text-align:center;
+    color:#6A6152;
+    font-size:0.9rem;
+    line-height:1.7;
+  }
+
+  /* ---------- Character Gallery ---------- */
+  .gallery{
+    max-width:1000px;
+    margin:16vh auto 8vh;
+    padding:0 6vw;
+  }
+  .gallery-title{
+    text-align:center;
+    font-size:clamp(1.5rem, 3.5vw, 2.1rem);
+    color:var(--ink);
+    margin-bottom:60px;
+  }
+  .gallery-grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:flex-start;
+    gap:32px;
+  }
+  .gallery-card{
+    width:230px;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 20px 40px rgba(27,42,74,0.18);
+    background:#fff;
+    padding:8px;
+    animation:breathe 5s ease-in-out infinite;
+  }
+  .gallery-card img{
+    width:100%;
+    aspect-ratio:3/4;
+    object-fit:cover;
+    border-radius:12px;
+    display:block;
+  }
+  .card-1{transform:rotate(-4deg) translateY(10px); animation-delay:0s;}
+  .card-2{transform:rotate(2deg) translateY(-14px); animation-delay:0.6s; width:250px;}
+  .card-3{transform:rotate(-2deg) translateY(6px); animation-delay:1.2s;}
+
+  @keyframes breathe{
+    0%,100%{transform:translateY(0) scale(1);}
+    50%{transform:translateY(-10px) scale(1.015);}
+  }
+  .card-1{animation-name:breathe1;}
+  .card-2{animation-name:breathe2;}
+  .card-3{animation-name:breathe3;}
+  @keyframes breathe1{
+    0%,100%{transform:rotate(-4deg) translateY(10px);}
+    50%{transform:rotate(-4deg) translateY(0px);}
+  }
+  @keyframes breathe2{
+    0%,100%{transform:rotate(2deg) translateY(-14px);}
+    50%{transform:rotate(2deg) translateY(-24px);}
+  }
+  @keyframes breathe3{
+    0%,100%{transform:rotate(-2deg) translateY(6px);}
+    50%{transform:rotate(-2deg) translateY(-4px);}
+  }
+  @media(max-width:700px){
+    .gallery-card, .card-2{width:42%; min-width:150px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .gallery-card{animation:none !important;}
   }
 
   /* ---------- Steps ---------- */
@@ -292,78 +443,38 @@
   </div>
 
   <div class="stage">
-    <div class="stage-inner">
-      <svg class="hero-figure" viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="sky" cx="42%" cy="38%" r="80%">
-            <stop offset="0%" stop-color="#FDEBB0"/>
-            <stop offset="45%" stop-color="#F2B84E"/>
-            <stop offset="100%" stop-color="#C9752A"/>
-          </radialGradient>
-          <linearGradient id="cape" x1="0" y1="0" x2="1" y2="0.4">
-            <stop offset="0%" stop-color="#FF6B3D"/>
-            <stop offset="100%" stop-color="#B23E1E"/>
-          </linearGradient>
-        </defs>
+    <div class="blob blob-mint"></div>
+    <div class="blob blob-gold"></div>
+    <div class="blob blob-coral"></div>
 
-        <!-- sky backdrop -->
-        <rect x="0" y="0" width="320" height="240" rx="6" fill="url(#sky)"/>
+    <svg class="sparkle-deco sparkle-1" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2 L14 9 L21 9 L15.5 13.5 L17.5 21 L12 16.5 L6.5 21 L8.5 13.5 L3 9 L10 9 Z" fill="var(--gold)"/>
+    </svg>
+    <svg class="sparkle-deco sparkle-2" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2 L14 9 L21 9 L15.5 13.5 L17.5 21 L12 16.5 L6.5 21 L8.5 13.5 L3 9 L10 9 Z" fill="var(--coral)"/>
+    </svg>
 
-        <!-- sunburst rays -->
-        <g stroke="#FFF3D6" stroke-width="3" opacity="0.55">
-          <line x1="150" y1="95" x2="150" y2="40"/>
-          <line x1="150" y1="95" x2="105" y2="55"/>
-          <line x1="150" y1="95" x2="195" y2="55"/>
-          <line x1="150" y1="95" x2="70" y2="90"/>
-          <line x1="150" y1="95" x2="230" y2="90"/>
-        </g>
-
-        <!-- distant hills -->
-        <path d="M0 196 Q60 172 120 194 T240 192 T320 198 V240 H0 Z" fill="#1B2A4A" opacity="0.92"/>
-        <path d="M0 212 Q80 192 160 213 T320 210 V240 H0 Z" fill="#12203A"/>
-
-        <!-- stars -->
-        <g fill="#FFFDF3" opacity="0.9">
-          <circle cx="266" cy="34" r="2.2"/>
-          <circle cx="284" cy="58" r="1.6"/>
-          <circle cx="250" cy="66" r="1.4"/>
-        </g>
-
-        <!-- speed lines behind flying figure -->
-        <g stroke="#FFF3D6" stroke-width="4" stroke-linecap="round" opacity="0.7">
-          <line x1="196" y1="150" x2="238" y2="146"/>
-          <line x1="192" y1="164" x2="246" y2="162"/>
-          <line x1="200" y1="178" x2="234" y2="180"/>
-        </g>
-
-        <!-- flowing cape, streaming back -->
-        <path d="M158 108 C118 104 78 118 58 150 C90 148 108 158 118 178 C132 158 150 150 168 154 C182 140 178 118 158 108 Z" fill="url(#cape)"/>
-
-        <!-- body, leaning forward as if flying -->
-        <g transform="rotate(-14 160 130)">
-          <rect x="140" y="128" width="40" height="46" rx="14" fill="#1B2A4A"/>
-          <circle cx="160" cy="166" r="15" fill="#FFD873"/>
-          <path d="M153 166 L158 171 L168 159" stroke="#1B2A4A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-
-          <!-- one arm forward (flying pose), one arm back -->
-          <path d="M140 138 Q108 120 88 96" stroke="#F1D9B0" stroke-width="14" stroke-linecap="round"/>
-          <path d="M180 140 Q206 152 224 168" stroke="#F1D9B0" stroke-width="14" stroke-linecap="round"/>
-
-          <!-- head -->
-          <circle cx="160" cy="98" r="30" fill="#F1D9B0"/>
-          <path d="M132 96 Q132 68 160 68 Q188 68 188 96 Q188 78 160 78 Q132 78 132 96 Z" fill="#2B2118"/>
-          <path d="M138 92 Q160 84 182 92 Q182 100 160 102 Q138 100 138 92 Z" fill="#1B2A4A"/>
-          <path d="M150 108 Q160 118 170 108" stroke="#7A4A2B" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        </g>
-
-        <!-- sparkle bursts near lead hand -->
-        <g stroke="#FFFDF3" stroke-width="2.4" stroke-linecap="round">
-          <path d="M82 82 L82 94 M75 88 L89 88"/>
-          <path d="M96 70 L96 78 M91 74 L101 74"/>
-        </g>
-      </svg>
+    <div class="mini-avatar">
+      <img src="gallery-girl.png" alt="">
     </div>
-    <p class="stage-caption" data-i18n="stage-caption">طفلك هو البطل. اصنع له مغامرة برسومٍ فنية تحمل اسمه، وتبقى ذكرى تدوم للأبد.</p>
+
+    <img class="stage-figure" src="hero-boy.png" alt="طفل بطل قصته الخاصة">
+  </div>
+  <p class="stage-caption" data-i18n="stage-caption">طفلك هو البطل. اصنع له مغامرة برسومٍ فنية تحمل اسمه، وتبقى ذكرى تدوم للأبد.</p>
+</section>
+
+<section class="gallery">
+  <h2 class="gallery-title display" data-i18n="gallery-title">هيك ممكن يبدو بطل قصتك</h2>
+  <div class="gallery-grid">
+    <div class="gallery-card card-1">
+      <img src="gallery-girl.png" alt="بطلة مغامرة">
+    </div>
+    <div class="gallery-card card-2">
+      <img src="gallery-bedtime.png" alt="لحظة قراءة دافئة بين الأهل والطفل">
+    </div>
+    <div class="gallery-card card-3">
+      <img src="hero-boy.png" alt="بطل مغامرة الجبل">
+    </div>
   </div>
 </section>
 
@@ -401,6 +512,7 @@ const translations = {
     'cta-primary': 'ابدأ قصتك',
     'cta-secondary': 'شوف مثال',
     'stage-caption': 'طفلك هو البطل. اصنع له مغامرة برسومٍ فنية تحمل اسمه، وتبقى ذكرى تدوم للأبد.',
+    'gallery-title': 'هيك ممكن يبدو بطل قصتك',
     'step1-num': '١',
     'step2-num': '٢',
     'step3-num': '٣',
@@ -420,6 +532,7 @@ const translations = {
     'cta-primary': 'Start Your Story',
     'cta-secondary': 'See an Example',
     'stage-caption': 'Your child is the hero. Give them an artful adventure that carries their name — a keepsake that lasts forever.',
+    'gallery-title': "This is what your child's hero could look like",
     'step1-num': '1',
     'step2-num': '2',
     'step3-num': '3',
@@ -439,6 +552,7 @@ const translations = {
     'cta-primary': 'התחילו את הסיפור',
     'cta-secondary': 'צפו בדוגמה',
     'stage-caption': 'הילד שלכם הוא הגיבור. תנו לו הרפתקה אמנותית הנושאת את שמו — זיכרון שנשאר לנצח.',
+    'gallery-title': 'כך יכול להיראות הגיבור של הילד שלכם',
     'step1-num': '1',
     'step2-num': '2',
     'step3-num': '3',

@@ -312,8 +312,8 @@
   <div class="progress">
     <div class="done"></div><div></div><div></div>
   </div>
-  <h1 class="page-title display" data-i18n="page-title">احكيلنا عن طفلك</h1>
-  <p class="page-sub" data-i18n="page-sub">كل التفاصيل يلي بتكتبها هون بتصير جزء من قصته.</p>
+  <h1 class="page-title display" data-i18n="page-title">حدّثنا عن طفلك</h1>
+  <p class="page-sub" data-i18n="page-sub">كل تفصيلٍ تكتبه هنا يصبح جزءًا من قصته.</p>
 
   <!-- Card 1: child details -->
   <div class="card">
@@ -349,14 +349,14 @@
       <button type="button" class="chip" data-i18n="hobby-adventure">المغامرات</button>
     </div>
 
-    <label class="field-label" style="margin-top:20px;" data-i18n="label-extra">شي إضافي بدك تحكيه عنه؟ (اختياري)</label>
-    <textarea id="extraDetails" data-i18n-placeholder="ph-extra" placeholder="مثلاً: بيحب يكون شجاع، أو بيحب أخته الصغيرة..."></textarea>
+    <label class="field-label" style="margin-top:20px;" data-i18n="label-extra">أمرٌ إضافي تودّ إخبارنا به عنه؟ (اختياري)</label>
+    <textarea id="extraDetails" data-i18n-placeholder="ph-extra" placeholder="مثلاً: يحب أن يكون شجاعًا، أو يحب أخته الصغيرة..."></textarea>
   </div>
 
   <!-- Card 2: illustration style -->
   <div class="card">
     <span class="card-eyebrow" data-i18n="card2-eyebrow">الخطوة الثانية</span>
-    <h2 data-i18n="card2-title">شو شكله بالقصة؟</h2>
+    <h2 data-i18n="card2-title">كيف ستكون ملامحه في القصة؟</h2>
 
     <div class="option-grid">
       <label class="option-card selected" id="optCartoon">
@@ -378,7 +378,7 @@
     </div>
 
     <div class="upload-zone" id="uploadZone">
-      <p data-i18n="upload-text">اسحب صورة هون أو اختارها من جهازك</p>
+      <p data-i18n="upload-text">اسحب صورةً هنا أو اخترها من جهازك</p>
       <input type="file" accept="image/*">
     </div>
   </div>
@@ -386,7 +386,7 @@
   <!-- Card 3: package -->
   <div class="card">
     <span class="card-eyebrow" data-i18n="card3-eyebrow">الخطوة الثالثة</span>
-    <h2 data-i18n="card3-title">كيف بدك تستلم القصة؟</h2>
+    <h2 data-i18n="card3-title">كيف تودّ استلام القصة؟</h2>
 
     <div class="package-grid">
       <label class="package-card selected" id="pkgDigital">
@@ -406,11 +406,11 @@
 
   <div class="submit-row">
     <button class="btn-primary" id="genBtn" data-i18n="submit-btn">أنشئ قصة طفلك</button>
-    <p class="helper-note" data-i18n="submit-note">ما رح ننشر أي معلومة أو صورة عن طفلك — كل شي خاص وآمن.</p>
+    <p class="helper-note" data-i18n="submit-note">لن ننشر أي معلومة أو صورة عن طفلك — كل شيء خاصٌّ وآمن.</p>
   </div>
 
   <div class="story-loading" id="loading">
-    <span data-i18n="loading-text">جاري نسج المغامرة</span>
+    <span data-i18n="loading-text">جارٍ نسج المغامرة</span>
     <span class="dots"><span>.</span><span>.</span><span>.</span></span>
   </div>
 
@@ -435,36 +435,36 @@
 const translations = {
   ar: {
     logo: 'أميري <span>Amiri</span>',
-    'page-title': 'احكيلنا عن طفلك',
-    'page-sub': 'كل التفاصيل يلي بتكتبها هون بتصير جزء من قصته.',
+    'page-title': 'حدّثنا عن طفلك',
+    'page-sub': 'كل تفصيلٍ تكتبه هنا يصبح جزءًا من قصته.',
     'card1-eyebrow': 'الخطوة الأولى',
-    'card1-title': 'من هو البطل؟',
+    'card1-title': 'مَن هو البطل؟',
     'label-name': 'اسم الطفل',
     'ph-name': 'مثال: يوسف',
     'label-age': 'العمر',
     'ph-age': 'مثال: 6',
-    'label-hobbies': 'هواياته (اختار حتى مغامرتين اثنتين)',
+    'label-hobbies': 'هواياته (اختر حتى مغامرتين اثنتين)',
     'label-gender': 'الجنس',
     'gender-male': 'ذكر',
     'gender-female': 'أنثى',
     'hobby-space': 'الفضاء','hobby-dino': 'الديناصورات','hobby-sea': 'البحر والغوص','hobby-sport': 'الرياضة',
     'hobby-art': 'الرسم والفن','hobby-music': 'الموسيقى','hobby-animals': 'الحيوانات','hobby-adventure': 'المغامرات',
-    'label-extra': 'شي إضافي بدك تحكيه عنه؟ (اختياري)',
-    'ph-extra': 'مثلاً: بيحب يكون شجاع، أو بيحب أخته الصغيرة...',
+    'label-extra': 'أمرٌ إضافي تودّ إخبارنا به عنه؟ (اختياري)',
+    'ph-extra': 'مثلاً: يحب أن يكون شجاعًا، أو يحب أخته الصغيرة...',
     'card2-eyebrow': 'الخطوة الثانية',
-    'card2-title': 'شو شكله بالقصة؟',
+    'card2-title': 'كيف ستكون ملامحه في القصة؟',
     'opt-cartoon-title': 'رسمة كرتونية',
-    'opt-cartoon-body': 'نختار له ستايل رسم يشبه وصفك إله',
+    'opt-cartoon-body': 'نختار له أسلوب رسمٍ يشبه وصفك له',
     'opt-upload-title': 'ارفع صورته',
-    'opt-upload-body': 'وحوّلها لرسمة كرتونية بأسلوب القصة',
-    'upload-text': 'اسحب صورة هون أو اختارها من جهازك',
+    'opt-upload-body': 'ونحوّلها إلى رسمة كرتونية بأسلوب القصة',
+    'upload-text': 'اسحب صورةً هنا أو اخترها من جهازك',
     'card3-eyebrow': 'الخطوة الثالثة',
-    'card3-title': 'كيف بدك تستلم القصة؟',
-    'pkg-digital-badge': 'الأسرع','pkg-digital-title': 'نسخة رقمية','pkg-digital-body': 'تقراها فورًا أونلاين، وتقدر تحمّلها كـ PDF.',
-    'pkg-print-badge': 'هدية','pkg-print-title': 'نسخة مطبوعة','pkg-print-body': 'كتاب حقيقي بغلاف فاخر، بوصلك بالبريد.',
+    'card3-title': 'كيف تودّ استلام القصة؟',
+    'pkg-digital-badge': 'الأسرع','pkg-digital-title': 'نسخة رقمية','pkg-digital-body': 'اقرأها فورًا عبر الإنترنت، أو حمّلها بصيغة PDF.',
+    'pkg-print-badge': 'هدية','pkg-print-title': 'نسخة مطبوعة','pkg-print-body': 'كتابٌ حقيقي بغلافٍ فاخر، يصلك بالبريد.',
     'submit-btn': 'أنشئ قصة طفلك',
-    'submit-note': 'ما رح ننشر أي معلومة أو صورة عن طفلك — كل شي خاص وآمن.',
-    'loading-text': 'جاري نسج المغامرة'
+    'submit-note': 'لن ننشر أي معلومة أو صورة عن طفلك — كل شيء خاصٌّ وآمن.',
+    'loading-text': 'جارٍ نسج المغامرة'
   },
   en: {
     logo: 'Amiri <span>أميري</span>',
@@ -613,7 +613,7 @@ function showIllustrationNotice(childName){
   loadingEl.style.display = 'block';
 
   const notice = {
-    ar: `🎨<br><span style="font-size:0.7rem;color:#8A8272;display:block;margin-top:8px;line-height:1.5;">رسمة ${childName || 'طفلك'} الخاصة بتصير جاهزة فور إتمام الشراء</span>`,
+    ar: `🎨<br><span style="font-size:0.7rem;color:#8A8272;display:block;margin-top:8px;line-height:1.5;">رسمة ${childName || 'طفلك'} الخاصة ستكون جاهزة فور إتمام الشراء</span>`,
     en: `🎨<br><span style="font-size:0.7rem;color:#8A8272;display:block;margin-top:8px;line-height:1.5;">${childName || 'Your child'}'s custom illustration will be ready right after purchase</span>`,
     he: `🎨<br><span style="font-size:0.7rem;color:#8A8272;display:block;margin-top:8px;line-height:1.5;">האיור המותאם אישית של ${childName || 'הילד שלכם'} יהיה מוכן מיד לאחר הרכישה</span>`
   };
@@ -657,7 +657,7 @@ function renderBookPage(){
     document.getElementById('bookIllustration').style.display = 'none';
     const lockTitle = { ar: 'القصة كاملة بانتظارك 📖', en: 'The full story awaits 📖', he: 'הסיפור המלא מחכה לכם 📖' };
     const lockBody = {
-      ar: `باقي ${currentBook.pages.length - FREE_PAGES} صفحة من مغامرة ${currentBook.title.split(' ').slice(-1)[0] || 'طفلك'} — اشترِ القصة كاملة لتكملتها معه.`,
+      ar: `بقيت ${currentBook.pages.length - FREE_PAGES} صفحاتٍ من مغامرة ${currentBook.title.split(' ').slice(-1)[0] || 'طفلك'} — اشترِ القصة كاملةً لتكملتها معه.`,
       en: `${currentBook.pages.length - FREE_PAGES} more pages of the adventure are waiting — purchase the full story to continue together.`,
       he: `נשארו עוד ${currentBook.pages.length - FREE_PAGES} עמודים בהרפתקה — רכשו את הסיפור המלא כדי להמשיך יחד.`
     };
@@ -746,7 +746,7 @@ document.getElementById('genBtn').addEventListener('click', async ()=>{
     console.error(err);
     currentBook = null;
     document.getElementById('storyTitle').textContent = '—';
-    document.getElementById('storyText').textContent = err.message || 'صار في خطأ، جرّب مرة تانية.';
+    document.getElementById('storyText').textContent = err.message || 'حدث خطأ، يرجى المحاولة مرة أخرى.';
     document.getElementById('bookDots').innerHTML = '';
     document.getElementById('prevBtn').style.display = 'none';
     document.getElementById('nextBtn').style.display = 'none';

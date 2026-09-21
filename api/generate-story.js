@@ -29,18 +29,45 @@ export default async function handler(req, res) {
   const genderNoteEn = isFemale ? 'Use "she/her" pronouns throughout.' : 'Use "he/him" pronouns throughout.';
 
   const prompts = {
-    ar: `اكتب قصة أطفال قصيرة ودافئة باللغة العربية الفصحى المبسطة (تناسب طفل عمره ${age} سنوات)، بطلها طفل اسمه "${name}"، وتدور أحداثها حول مغامرة تجمع بين "${hobby1}" و "${hobby2}". ${genderNoteAr}
-قسّم القصة إلى ١٥ صفحة متتالية، كل صفحة فيها جملة أو جملتين بس (قصيرة ومناسبة لعمر الطفل)، بحيث تكون هناك بداية ووسط ونهاية سعيدة، والطفل شجاع وذكي، وتحمل القصة رسالة إيجابية بسيطة بالنهاية.
+    ar: `أنت كاتب قصص أطفال محترف ومشهور بأسلوبه الآسر. اكتب قصة أطفال باللغة العربية الفصحى السليمة (سهلة ومباشرة، بدون تعقيد لغوي، تناسب طفل عمره ${age} سنوات)، بطلها طفل اسمه "${name}"، وتدور أحداثها حول مغامرة تجمع بين "${hobby1}" و "${hobby2}". ${genderNoteAr}
+
+قواعد الكتابة المهمة:
+- استخدم جملًا قصيرة، إيقاعها موسيقي، سهلة القراءة بصوت عالٍ للطفل
+- ابدأ كل صفحة بطريقة تخلق فضولًا يدفع الطفل لقلب الصفحة التالية (تشويق بسيط، سؤال ضمني، أو لحظة مفاجئة)
+- استخدم تفاصيل حسية حية (ألوان، أصوات، إحساس) بدل الوصف العام
+- خلّي ${name} يواجه لحظة خوف أو تردد بسيطة بمنتصف القصة، وبعدين يتغلب عليها بذكائه أو شجاعته — هاد يخلق تعلّق عاطفي حقيقي
+- تجنب الكليشيهات والعبارات المكرورة، واكتب بأسلوب طازج ومختلف
+- النهاية يجب أن تكون مُرضية عاطفيًا ومحمّلة برسالة إيجابية واضحة بس غير مباشرة (مش وعظ)
+
+قسّم القصة إلى ١٥ صفحة متتالية، كل صفحة فيها جملة أو جملتين بس (قصيرة ومناسبة لعمر الطفل).
 لكل صفحة، اكتب أيضًا وصفًا قصيرًا بالإنجليزية للمشهد (scene) يُستخدم لاحقًا لتوليد رسمة كرتونية توضح الصفحة.
 أعطني فقط بصيغة JSON بدون أي نص إضافي أو علامات markdown:
 {"title": "عنوان القصة", "pages": [{"text": "نص الصفحة الأولى", "scene": "short English scene description"}, ...]}`,
-    en: `Write a short, warm children's story in English (suitable for a ${age}-year-old), starring a child named "${name}", about an adventure combining "${hobby1}" and "${hobby2}". ${genderNoteEn}
-Split the story into 15 sequential pages, each with just 1-2 short, age-appropriate sentences, with a clear beginning, middle, and happy ending, where the child is brave and clever, and the story carries a simple positive message at the end.
+    en: `You are a professional, celebrated children's book author known for captivating young readers. Write a children's story in clear, natural English (suitable for a ${age}-year-old), starring a child named "${name}", about an adventure combining "${hobby1}" and "${hobby2}". ${genderNoteEn}
+
+Writing rules:
+- Use short, rhythmic sentences that read beautifully aloud
+- Open each page with something that sparks curiosity and makes the child want to turn to the next page (light suspense, an implied question, or a small surprise)
+- Use vivid sensory details (color, sound, feeling) instead of generic description
+- Give ${name} a small moment of fear or hesitation around the middle of the story, then have them overcome it through cleverness or courage — this builds real emotional connection
+- Avoid clichés and repeated phrasing; keep the voice fresh and distinctive
+- The ending should feel emotionally satisfying and carry a clear but non-preachy positive message
+
+Split the story into 15 sequential pages, each with just 1-2 short, age-appropriate sentences.
 For each page, also write a short scene description used later to generate a matching cartoon illustration.
 Reply ONLY in JSON with no extra text or markdown:
 {"title": "story title", "pages": [{"text": "page one text", "scene": "short scene description"}, ...]}`,
-    he: `כתבו סיפור ילדים קצר וחם בעברית (מתאים לילד בגיל ${age}), שגיבורו ילד בשם "${name}", על הרפתקה המשלבת "${hobby1}" ו-"${hobby2}". ${genderNoteHe}
-חלקו את הסיפור ל-15 עמודים רצופים, כל עמוד עם משפט או שניים קצרים בלבד, עם התחלה, אמצע וסוף שמח ברור, כשהילד אמיץ וחכם, והסיפור נושא מסר חיובי פשוט בסוף.
+    he: `אתם סופרי ילדים מקצועיים וידועים בסגנון כתיבה מרתק. כתבו סיפור ילדים בעברית תקנית וברורה (מתאים לילד בגיל ${age}), שגיבורו ילד בשם "${name}", על הרפתקה המשלבת "${hobby1}" ו-"${hobby2}". ${genderNoteHe}
+
+כללי כתיבה חשובים:
+- השתמשו במשפטים קצרים וקצביים, נעימים לקריאה בקול
+- פתחו כל עמוד באופן שמעורר סקרנות ומניע את הילד להפוך לעמוד הבא (מתח קל, שאלה מרומזת, או הפתעה קטנה)
+- השתמשו בפרטים חושיים חיים (צבע, קול, תחושה) במקום תיאור כללי
+- תנו ל${name} רגע קטן של פחד או היסוס באמצע הסיפור, ואז שיתגבר עליו בעזרת חוכמה או אומץ — זה יוצר חיבור רגשי אמיתי
+- הימנעו מקלישאות וניסוחים חוזרים, וכתבו בקול רענן וייחודי
+- הסוף צריך להיות מספק רגשית ולשאת מסר חיובי ברור אך לא מטיף
+
+חלקו את הסיפור ל-15 עמודים רצופים, כל עמוד עם משפט או שניים קצרים בלבד.
 לכל עמוד, כתבו גם תיאור קצר באנגלית של הסצנה לשימוש עתידי ביצירת איור מתאים.
 ענו רק בפורמט JSON ללא טקסט נוסף או markdown:
 {"title": "כותרת הסיפור", "pages": [{"text": "טקסט העמוד הראשון", "scene": "תיאור סצנה קצר"}, ...]}`
@@ -58,7 +85,7 @@ Reply ONLY in JSON with no extra text or markdown:
       },
       body: JSON.stringify({
         model: 'claude-sonnet-5',
-        max_tokens: 2000,
+        max_tokens: 2500,
         messages: [{ role: 'user', content: selectedPrompt }]
       })
     });

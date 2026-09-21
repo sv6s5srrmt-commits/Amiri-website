@@ -140,7 +140,8 @@
     transition:transform 0.2s ease, box-shadow 0.2s ease;
     font-family:inherit;
   }
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(228,87,46,0.45);}
+  .btn-primary:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 32px rgba(228,87,46,0.5);}
+  .btn-primary:active{transform:translateY(-1px) scale(0.98);}
   .hero .btn-primary{animation:pulseGlow 3s ease-in-out infinite;}
   @keyframes pulseGlow{
     0%,100%{box-shadow:0 8px 24px rgba(228,87,46,0.35);}
@@ -148,6 +149,50 @@
   }
   @media (prefers-reduced-motion: reduce){
     .hero .btn-primary{animation:none;}
+  }
+
+  /* ---------- Ambient particles (whole-page energy) ---------- */
+  .ambient-particles{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+    overflow:hidden;
+  }
+  .particle{
+    position:absolute;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--gold-bright), transparent 70%);
+    opacity:0.5;
+    animation:particleFloat linear infinite;
+  }
+  @keyframes particleFloat{
+    0%{transform:translateY(0) translateX(0) scale(1); opacity:0;}
+    10%{opacity:0.6;}
+    90%{opacity:0.4;}
+    100%{transform:translateY(-100vh) translateX(var(--drift, 30px)) scale(0.6); opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ambient-particles{display:none;}
+  }
+
+  header, .hero, .gallery, .steps, .footer-cta, footer.legal{
+    position:relative;
+    z-index:2;
+  }
+
+
+  .reveal{
+    opacity:0;
+    transform:translateY(36px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in-view{
+    opacity:1;
+    transform:translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
   }
 
   .btn-secondary{
@@ -344,6 +389,85 @@
     .gallery-card{animation:none !important;}
   }
 
+  /* ---------- Adventure filmstrip ---------- */
+  .filmstrip-section{
+    max-width:1100px;
+    margin:14vh auto 10vh;
+    padding:0 6vw;
+    text-align:center;
+  }
+  .filmstrip-title{
+    font-size:clamp(1.5rem, 3.5vw, 2.1rem);
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .filmstrip-sub{
+    color:#6A6152;
+    font-size:0.92rem;
+    margin-bottom:36px;
+  }
+  .filmstrip{
+    display:flex;
+    gap:16px;
+    overflow-x:auto;
+    padding:10px 4px 20px;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+  }
+  .filmstrip::-webkit-scrollbar{height:6px;}
+  .filmstrip::-webkit-scrollbar-thumb{background:var(--gold);border-radius:99px;}
+  .filmstrip img{
+    flex:0 0 auto;
+    width:190px;
+    aspect-ratio:3/4;
+    object-fit:cover;
+    border-radius:14px;
+    scroll-snap-align:center;
+    box-shadow:0 12px 28px rgba(27,42,74,0.2);
+    transition:transform 0.35s ease, box-shadow 0.35s ease;
+    filter:saturate(1.05);
+  }
+  .filmstrip img:hover, .filmstrip img:active{
+    transform:scale(1.08) translateY(-8px);
+    box-shadow:0 22px 40px rgba(27,42,74,0.32);
+  }
+
+  /* ---------- Parents trust section ---------- */
+  .trust-section{
+    max-width:900px;
+    margin:0 auto 14vh;
+    padding:0 6vw;
+  }
+  .trust-card{
+    display:flex;
+    align-items:center;
+    gap:32px;
+    background:var(--ink-deep);
+    border-radius:24px;
+    padding:32px;
+    box-shadow:0 24px 50px rgba(27,42,74,0.25);
+  }
+  .trust-card img{
+    width:150px;
+    height:150px;
+    border-radius:18px;
+    object-fit:cover;
+    flex-shrink:0;
+  }
+  .trust-stars{color:var(--gold);font-size:1.2rem;margin-bottom:10px;}
+  .trust-quote{
+    color:var(--parchment);
+    font-family:'Amiri',serif;
+    font-size:1.15rem;
+    line-height:1.9;
+    margin-bottom:12px;
+  }
+  .trust-author{color:var(--gold-bright);font-size:0.85rem;}
+  @media(max-width:640px){
+    .trust-card{flex-direction:column;text-align:center;}
+    .trust-card img{width:110px;height:110px;}
+  }
+
   /* ---------- Steps ---------- */
   .steps{
     max-width:1000px;
@@ -422,6 +546,8 @@
 </head>
 <body>
 
+<div class="ambient-particles" id="ambientParticles"></div>
+
 <header>
   <div class="logo" data-i18n="logo">أميري <span>Amiri</span></div>
   <div class="lang-switch">
@@ -463,7 +589,7 @@
   <p class="stage-caption" data-i18n="stage-caption">طفلك هو البطل. اصنع له مغامرةً برسومٍ فنية تحمل اسمه، وتبقى ذكرى تدوم للأبد.</p>
 </section>
 
-<section class="gallery">
+<section class="gallery reveal">
   <h2 class="gallery-title display" data-i18n="gallery-title">هكذا يمكن أن يبدو بطل قصتك</h2>
   <div class="gallery-grid">
     <div class="gallery-card card-1">
@@ -478,7 +604,31 @@
   </div>
 </section>
 
-<section class="steps">
+<section class="filmstrip-section reveal">
+  <h2 class="filmstrip-title display" data-i18n="filmstrip-title">مغامرة حقيقية بانتظار طفلك</h2>
+  <p class="filmstrip-sub" data-i18n="filmstrip-sub">هذه لقطات من قصة حقيقية — قصة طفلك ستكون بهذا العمق والتفصيل</p>
+  <div class="filmstrip">
+    <img src="page1.png" alt="لقطة من مغامرة القصة">
+    <img src="page2.png" alt="لقطة من مغامرة القصة">
+    <img src="page3.png" alt="لقطة من مغامرة القصة">
+    <img src="page4.png" alt="لقطة من مغامرة القصة">
+    <img src="page5.png" alt="لقطة من مغامرة القصة">
+    <img src="page6.png" alt="لقطة من مغامرة القصة">
+  </div>
+</section>
+
+<section class="trust-section reveal">
+  <div class="trust-card">
+    <img src="gallery-bedtime.png" alt="أهل يقرؤون القصة مع طفلهم">
+    <div class="trust-text">
+      <div class="trust-stars">★★★★★</div>
+      <p class="trust-quote" data-i18n="trust-quote">"لم أتخيل أن ابني سيطلب مني قراءة القصة كل ليلة لأسبوعٍ كامل. رؤية اسمه بطلًا لقصةٍ حقيقية غيّرت طريقة نظره لنفسه."</p>
+      <p class="trust-author" data-i18n="trust-author">— أحد الآباء الذين جرّبوا Amiri</p>
+    </div>
+  </div>
+</section>
+
+<section class="steps reveal">
   <div class="step">
     <div class="step-num" data-i18n="step1-num">١</div>
     <h3 data-i18n="step1-title">حدّثنا عنه</h3>
@@ -496,7 +646,7 @@
   </div>
 </section>
 
-<section class="footer-cta">
+<section class="footer-cta reveal">
   <h2 class="display" data-i18n="footer-headline">أجاهزٌ أنت لتجعل طفلك بطلًا؟</h2>
   <button class="btn-primary" data-i18n="cta-primary" onclick="window.location.href='story.html'">ابدأ قصتك</button>
 </section>
@@ -513,6 +663,10 @@ const translations = {
     'cta-secondary': 'شاهد مثالًا',
     'stage-caption': 'طفلك هو البطل. اصنع له مغامرةً برسومٍ فنية تحمل اسمه، وتبقى ذكرى تدوم للأبد.',
     'gallery-title': 'هكذا يمكن أن يبدو بطل قصتك',
+    'filmstrip-title': 'مغامرة حقيقية بانتظار طفلك',
+    'filmstrip-sub': 'هذه لقطات من قصة حقيقية — قصة طفلك ستكون بهذا العمق والتفصيل',
+    'trust-quote': '"لم أتخيل أن ابني سيطلب مني قراءة القصة كل ليلة لأسبوعٍ كامل. رؤية اسمه بطلًا لقصةٍ حقيقية غيّرت طريقة نظره لنفسه."',
+    'trust-author': '— أحد الآباء الذين جرّبوا Amiri',
     'step1-num': '١',
     'step2-num': '٢',
     'step3-num': '٣',
@@ -533,6 +687,10 @@ const translations = {
     'cta-secondary': 'View an Example',
     'stage-caption': 'Your child is the hero. Give them an artfully illustrated adventure that carries their name — a keepsake to treasure forever.',
     'gallery-title': "This is what your child's hero could look like",
+    'filmstrip-title': "A real adventure awaits your child",
+    'filmstrip-sub': "These are scenes from a real story — your child's story will have this same depth and detail",
+    'trust-quote': '"I never imagined my son would ask me to read the story every night for a whole week. Seeing his own name as the hero of a real story changed the way he sees himself."',
+    'trust-author': '— A parent who tried Amiri',
     'step1-num': '1',
     'step2-num': '2',
     'step3-num': '3',
@@ -553,6 +711,10 @@ const translations = {
     'cta-secondary': 'צפו בדוגמה',
     'stage-caption': 'ילדכם הוא הגיבור. העניקו לו הרפתקה מאוירת בשמו — זיכרון שיישאר איתו לנצח.',
     'gallery-title': 'כך עשוי להיראות גיבור סיפורו של ילדכם',
+    'filmstrip-title': 'הרפתקה אמיתית מחכה לילדכם',
+    'filmstrip-sub': 'אלו קטעים מסיפור אמיתי — סיפורו של ילדכם יהיה בעומק ובפירוט דומים',
+    'trust-quote': '"לא תיארתי לעצמי שבני יבקש ממני לקרוא את הסיפור בכל ערב במשך שבוע שלם. לראות את שמו כגיבור של סיפור אמיתי שינה את האופן שבו הוא רואה את עצמו."',
+    'trust-author': '— הורה שניסה את Amiri',
     'step1-num': '1',
     'step2-num': '2',
     'step3-num': '3',
@@ -583,6 +745,44 @@ function setLang(lang){
 document.querySelectorAll('.lang-switch button').forEach(btn=>{
   btn.addEventListener('click', ()=> setLang(btn.dataset.lang));
 });
+
+// ambient floating particles
+(function(){
+  const container = document.getElementById('ambientParticles');
+  if(!container) return;
+  const count = window.innerWidth < 640 ? 10 : 18;
+  for(let i = 0; i < count; i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 3 + Math.random() * 5;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.bottom = '-20px';
+    p.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+    p.style.animationDuration = (10 + Math.random() * 14) + 's';
+    p.style.animationDelay = (Math.random() * 14) + 's';
+    container.appendChild(p);
+  }
+})();
+
+// scroll reveal
+(function(){
+  const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){
+    els.forEach(el => el.classList.add('in-view'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  els.forEach(el => observer.observe(el));
+})();
 </script>
 
 </body>

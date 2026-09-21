@@ -9,7 +9,7 @@
 <style>
   :root{
     --ink:#1B2A4A; --ink-deep:#12203A; --parchment:#F7F1E3; --parchment-warm:#F1E8D2;
-    --gold:#C9A227; --gold-bright:#E3C158; --coral:#E4572E; --charcoal:#2B2118;
+    --gold:#C9A227; --gold-bright:#E3C158; --gold-deep:#8A6A14; --coral:#E4572E; --charcoal:#2B2118;
     --mint:#8FD4C4; --pink:#F3AEB9; --lavender:#B9A6D9;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -90,6 +90,42 @@
   .book-dots span{width:8px;height:8px;border-radius:50%;background:rgba(247,241,227,0.3);}
   .book-dots span.active{background:var(--gold-bright);}
 
+  .cert-below{max-width:340px;margin:44px auto 0;text-align:center;}
+  .cert-below .reveal-line{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+  .cert-below .reveal-line::before, .cert-below .reveal-line::after{content:'';flex:1;height:1px;background:linear-gradient(90deg, transparent, var(--gold), transparent);}
+  .cert-below h3{font-family:'Amiri',serif;font-size:1.2rem;color:var(--ink);white-space:nowrap;}
+  .cert-below .cert-sub{color:#6A6152;font-size:0.85rem;margin-bottom:26px;line-height:1.7;}
+
+  .certificate{
+    position:relative;width:100%;max-width:320px;margin:0 auto;
+    background:linear-gradient(160deg, var(--ink-deep), var(--ink) 55%, var(--ink-deep)),
+      repeating-linear-gradient(45deg, rgba(227,193,88,0.04) 0px, rgba(227,193,88,0.04) 1px, transparent 1px, transparent 12px);
+    border-radius:18px;padding:5px;box-shadow:0 24px 50px rgba(18,32,58,0.35);
+  }
+  .cert-gold-edge{border:1.5px solid var(--gold-bright);border-radius:14px;padding:20px 16px 16px;}
+  .cert-frame{border:1.5px solid var(--gold);border-radius:10px;padding:20px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;}
+  .cert-frame::before{content:'';position:absolute;inset:5px;border:1px solid rgba(227,193,88,0.35);border-radius:6px;pointer-events:none;}
+  .cert-corner{position:absolute;width:18px;height:18px;border:2px solid var(--gold-bright);}
+  .cert-corner.tl{top:-1.5px;left:-1.5px;border-right:none;border-bottom:none;border-radius:10px 0 0 0;}
+  .cert-corner.tr{top:-1.5px;right:-1.5px;border-left:none;border-bottom:none;border-radius:0 10px 0 0;}
+  .cert-corner.bl{bottom:-1.5px;left:-1.5px;border-right:none;border-top:none;border-radius:0 0 0 10px;}
+  .cert-corner.br{bottom:-1.5px;right:-1.5px;border-left:none;border-top:none;border-radius:0 0 10px 0;}
+  .cert-eyebrow{font-size:0.6rem;letter-spacing:2.5px;color:var(--gold-bright);text-transform:uppercase;margin-bottom:10px;}
+  .cert-title{font-family:'Amiri', serif;font-size:1.3rem;background:linear-gradient(180deg, var(--gold-bright), var(--gold-deep));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:14px;}
+  .cert-portrait-wrap{position:relative;width:112px;height:112px;margin-bottom:4px;}
+  .cert-laurel{position:absolute;inset:-16px;z-index:0;}
+  .cert-portrait{position:relative;z-index:1;width:112px;height:112px;border-radius:50%;object-fit:cover;object-position:60% 30%;border:3px solid var(--gold-bright);box-shadow:0 0 0 4px rgba(201,162,39,0.35), 0 10px 24px rgba(0,0,0,0.4);}
+  .cert-ribbon{display:flex;gap:5px;margin-top:8px;margin-bottom:12px;}
+  .cert-ribbon span{width:13px;height:28px;background:linear-gradient(180deg, #C0392B, #8E2A20);clip-path:polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);}
+  .cert-ribbon span:first-child{transform:rotate(-8deg);}
+  .cert-ribbon span:last-child{transform:rotate(8deg);}
+  .cert-grant-line{font-size:0.75rem;color:rgba(247,241,227,0.7);margin-bottom:5px;}
+  .cert-child-name{font-family:'Amiri', serif;font-size:1.6rem;color:var(--gold-bright);margin-bottom:10px;}
+  .cert-reason-line{font-size:0.76rem;color:rgba(247,241,227,0.72);line-height:1.8;max-width:220px;margin-bottom:14px;}
+  .cert-divider{width:56px;height:1px;background:linear-gradient(90deg, transparent, var(--gold-bright), transparent);margin-bottom:12px;}
+  .cert-signature{font-family:'Amiri', serif;font-size:0.92rem;color:var(--gold-bright);}
+  .cert-signature span{color:rgba(247,241,227,0.5);font-size:0.6rem;display:block;margin-top:3px;font-family:'Noto Sans Arabic',sans-serif;}
+
   .proof{
     margin-top:44px;padding:24px;background:#fff;border:1px solid rgba(27,42,74,0.08);
     border-radius:16px;text-align:center;
@@ -143,6 +179,36 @@
     </div>
   </div>
 
+  <div class="cert-below">
+    <div class="reveal-line"><h3 class="display" data-i18n="cert-headline-2">ومفاجأة أخيرة بانتظاره</h3></div>
+    <p class="cert-sub" data-i18n="cert-sub-2">بعد كل قصة، يحصل طفلك على شهادة بطل رسمية بإسمه وصورته — تذكار يفتخر بها للأبد</p>
+
+    <div class="certificate">
+      <div class="cert-gold-edge">
+        <div class="cert-frame">
+          <div class="cert-corner tl"></div><div class="cert-corner tr"></div><div class="cert-corner bl"></div><div class="cert-corner br"></div>
+          <div class="cert-eyebrow">Amiri — أميري</div>
+          <div class="cert-title" data-i18n="cert-title">شهادة بطل</div>
+          <div class="cert-portrait-wrap">
+            <svg class="cert-laurel" viewBox="0 0 200 200" fill="none">
+              <g stroke="#E3C158" stroke-width="2.5" stroke-linecap="round">
+                <path d="M30 100 Q20 60 40 30" fill="none"/><path d="M32 90 Q22 92 16 84"/><path d="M28 75 Q18 75 14 66"/><path d="M27 60 Q17 58 15 48"/><path d="M30 45 Q21 40 22 30"/>
+                <path d="M170 100 Q180 60 160 30" fill="none"/><path d="M168 90 Q178 92 184 84"/><path d="M172 75 Q182 75 186 66"/><path d="M173 60 Q183 58 185 48"/><path d="M170 45 Q179 40 178 30"/>
+              </g>
+            </svg>
+            <img class="cert-portrait" src="page6.png" alt="يوسف بطل القصة">
+          </div>
+          <div class="cert-ribbon"><span></span><span></span></div>
+          <div class="cert-grant-line" data-i18n="cert-grant-line">تُمنح هذه الشهادة إلى</div>
+          <div class="cert-child-name" data-i18n="cert-child-name">يوسف</div>
+          <div class="cert-reason-line" data-i18n="cert-reason-line">تقديرًا لشجاعته وذكائه في مغامرته الخاصة، وإثباتًا أنه بطل قصته من أولها لآخرها</div>
+          <div class="cert-divider"></div>
+          <div class="cert-signature">Amiri<span data-i18n="cert-signature-sub">دار القصص الشخصية</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="proof">
     <div class="stars">★★★★★</div>
     <p data-i18n="testimonial">"طلب مني ابني أن أقرأها له كل ليلةٍ قبل النوم لأسبوعٍ كامل. كانت المرة الأولى التي يرى فيها اسمه بطلًا لقصةٍ حقيقية."</p>
@@ -166,6 +232,13 @@ const sampleData = {
     'cta-heading': 'أمستعدٌّ طفلك ليصبح بطلًا؟',
     'cta-lead': 'اكتب تفاصيله الآن، واستلم قصته الكاملة في أقل من خمس دقائق.',
     'cta-btn': 'أنشئ قصة طفلك الآن',
+    'cert-headline-2': 'ومفاجأة أخيرة بانتظاره',
+    'cert-sub-2': 'بعد كل قصة، يحصل طفلك على شهادة بطل رسمية بإسمه وصورته — تذكار يفتخر بها للأبد',
+    'cert-title': 'شهادة بطل',
+    'cert-grant-line': 'تُمنح هذه الشهادة إلى',
+    'cert-child-name': 'يوسف',
+    'cert-reason-line': 'تقديرًا لشجاعته وذكائه في مغامرته الخاصة، وإثباتًا أنه بطل قصته من أولها لآخرها',
+    'cert-signature-sub': 'دار القصص الشخصية',
     title: 'يوسف ومركبة النجوم الضائعة',
     cover: 'هذه القصة كُتبت خصيصًا ليوسف —<br>نسخة وحيدة في العالم، لا يملكها سواه.',
     pages: [
@@ -186,6 +259,13 @@ const sampleData = {
     'cta-heading': 'Is your child ready to become a hero?',
     'cta-lead': "Share their details now, and receive their complete story in under five minutes.",
     'cta-btn': "Create Your Child's Story Now",
+    'cert-headline-2': 'And one last surprise awaits him',
+    'cert-sub-2': 'After every story, your child receives an official Hero Certificate with their name and portrait — a keepsake to treasure forever',
+    'cert-title': 'Hero Certificate',
+    'cert-grant-line': 'This certificate is awarded to',
+    'cert-child-name': 'Youssef',
+    'cert-reason-line': "In recognition of his courage and cleverness in his own adventure, and as proof that he is the hero of his story from beginning to end",
+    'cert-signature-sub': 'House of Personal Stories',
     title: "Youssef and the Lost Starship",
     cover: "This story was written especially for Youssef —<br>a one-of-a-kind copy that belongs to no one else in the world.",
     pages: [
@@ -206,6 +286,13 @@ const sampleData = {
     'cta-heading': 'האם ילדכם מוכן להפוך לגיבור?',
     'cta-lead': 'שתפו את פרטיו כעת, וקבלו את סיפורו המלא תוך פחות מחמש דקות.',
     'cta-btn': 'צרו את סיפורו של ילדכם עכשיו',
+    'cert-headline-2': 'והפתעה אחרונה מחכה לו',
+    'cert-sub-2': 'לאחר כל סיפור, ילדכם מקבל תעודת גיבור רשמית עם שמו ותמונתו — זיכרון שישמור עליו לנצח',
+    'cert-title': 'תעודת גיבור',
+    'cert-grant-line': 'תעודה זו מוענקת ל',
+    'cert-child-name': 'יוסף',
+    'cert-reason-line': 'הוקרה על אומץ וחוכמה בהרפתקה שלו, ולראיה שהוא גיבור סיפורו מתחילתו ועד סופו',
+    'cert-signature-sub': 'בית הסיפורים האישיים',
     title: 'יוסף וספינת הכוכבים האבודה',
     cover: 'הסיפור הזה נכתב במיוחד עבור יוסף —<br>עותק יחיד בעולם, ששייך רק לו.',
     pages: [

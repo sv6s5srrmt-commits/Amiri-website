@@ -16,8 +16,40 @@
     --gold-bright:#E3C158;
     --coral:#E4572E;
     --charcoal:#2B2118;
+    --mint:#8FD4C4;
+    --pink:#F3AEB9;
+    --lavender:#B9A6D9;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
+
+  .bg-blob{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(2px);
+    opacity:0.35;
+    pointer-events:none;
+    z-index:0;
+    animation:bgFloat ease-in-out infinite;
+  }
+  .bg-blob-1{width:220px;height:220px;background:radial-gradient(circle at 35% 30%, var(--mint), transparent 70%);top:-40px;right:-60px;animation-duration:9s;}
+  .bg-blob-2{width:160px;height:160px;background:radial-gradient(circle at 35% 30%, var(--pink), transparent 70%);top:40vh;left:-60px;animation-duration:11s;animation-direction:reverse;}
+  .bg-blob-3{width:130px;height:130px;background:radial-gradient(circle at 35% 30%, var(--gold-bright), transparent 70%);bottom:10vh;right:-40px;animation-duration:7.5s;}
+  .bg-blob-4{width:100px;height:100px;background:radial-gradient(circle at 35% 30%, var(--lavender), transparent 70%);bottom:30vh;left:10vw;animation-duration:8.5s;animation-direction:reverse;}
+  @keyframes bgFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-24px);}
+  }
+  .ambient-particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .particle{position:absolute;border-radius:50%;background:radial-gradient(circle, var(--gold-bright), transparent 70%);opacity:0.5;animation:particleFloat linear infinite;}
+  @keyframes particleFloat{
+    0%{transform:translateY(0) translateX(0) scale(1); opacity:0;}
+    10%{opacity:0.6;} 90%{opacity:0.35;}
+    100%{transform:translateY(-100vh) translateX(var(--drift, 30px)) scale(0.6); opacity:0;}
+  }
+  header, .wrap{position:relative;z-index:1;}
+  @media (prefers-reduced-motion: reduce){
+    .bg-blob, .particle{animation:none;}
+  }
   body{
     background:var(--parchment);
     color:var(--charcoal);
@@ -298,6 +330,12 @@
 </style>
 </head>
 <body>
+
+<div class="bg-blob bg-blob-1"></div>
+<div class="bg-blob bg-blob-2"></div>
+<div class="bg-blob bg-blob-3"></div>
+<div class="bg-blob bg-blob-4"></div>
+<div class="ambient-particles" id="ambientParticles"></div>
 
 <header>
   <div class="logo" data-i18n="logo">أميري <span>Amiri</span></div>
@@ -756,6 +794,26 @@ document.getElementById('genBtn').addEventListener('click', async ()=>{
     btn.disabled = false;
   }
 });
+
+// ambient floating particles
+(function(){
+  const container = document.getElementById('ambientParticles');
+  if(!container) return;
+  const count = window.innerWidth < 640 ? 8 : 14;
+  for(let i = 0; i < count; i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 3 + Math.random() * 5;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.bottom = '-20px';
+    p.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+    p.style.animationDuration = (10 + Math.random() * 14) + 's';
+    p.style.animationDelay = (Math.random() * 14) + 's';
+    container.appendChild(p);
+  }
+})();
 </script>
 
 </body>

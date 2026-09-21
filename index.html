@@ -21,12 +21,26 @@
   *{box-sizing:border-box;margin:0;padding:0;}
 
   body{
-    background:var(--parchment);
-    background-image:radial-gradient(rgba(201,162,39,0.12) 1.5px, transparent 1.5px);
-    background-size:28px 28px;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(143,212,196,0.55), transparent 45%),
+      radial-gradient(circle at 85% 15%, rgba(243,174,185,0.5), transparent 45%),
+      radial-gradient(circle at 50% 55%, rgba(185,166,217,0.4), transparent 50%),
+      radial-gradient(circle at 20% 85%, rgba(227,193,88,0.45), transparent 45%),
+      radial-gradient(circle at 90% 85%, rgba(228,87,46,0.25), transparent 45%),
+      var(--parchment);
+    background-attachment:fixed;
+    background-size:200% 200%;
+    animation:auroraShift 22s ease-in-out infinite;
     color:var(--charcoal);
     font-family:'Noto Sans Arabic','Noto Sans',sans-serif;
     overflow-x:hidden;
+  }
+  @keyframes auroraShift{
+    0%,100%{background-position:0% 0%, 100% 0%, 50% 50%, 0% 100%, 100% 100%, 0 0;}
+    50%{background-position:20% 30%, 80% 20%, 55% 45%, 15% 85%, 85% 90%, 0 0;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    body{animation:none;}
   }
 
   [dir="rtl"] .display{font-family:'Amiri', serif;}
@@ -139,6 +153,22 @@
     box-shadow:0 8px 24px rgba(228,87,46,0.35);
     transition:transform 0.2s ease, box-shadow 0.2s ease;
     font-family:inherit;
+    position:relative;
+    overflow:hidden;
+  }
+  .btn-primary::after{
+    content:'';
+    position:absolute;
+    top:0; left:-60%;
+    width:40%; height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+    transform:skewX(-20deg);
+    animation:shimmerSweep 3.2s ease-in-out infinite;
+  }
+  @keyframes shimmerSweep{
+    0%{left:-60%;}
+    50%{left:130%;}
+    100%{left:130%;}
   }
   .btn-primary:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 32px rgba(228,87,46,0.5);}
   .btn-primary:active{transform:translateY(-1px) scale(0.98);}
@@ -149,6 +179,7 @@
   }
   @media (prefers-reduced-motion: reduce){
     .hero .btn-primary{animation:none;}
+    .btn-primary::after{animation:none;display:none;}
   }
 
   /* ---------- Ambient particles (whole-page energy) ---------- */
@@ -162,15 +193,19 @@
   .particle{
     position:absolute;
     border-radius:50%;
-    background:radial-gradient(circle, var(--gold-bright), transparent 70%);
-    opacity:0.5;
-    animation:particleFloat linear infinite;
+    opacity:0.7;
+    box-shadow:0 0 12px 2px currentColor;
+    animation:particleFloat linear infinite, twinkle 2.4s ease-in-out infinite;
   }
   @keyframes particleFloat{
     0%{transform:translateY(0) translateX(0) scale(1); opacity:0;}
-    10%{opacity:0.6;}
-    90%{opacity:0.4;}
+    10%{opacity:0.85;}
+    90%{opacity:0.6;}
     100%{transform:translateY(-100vh) translateX(var(--drift, 30px)) scale(0.6); opacity:0;}
+  }
+  @keyframes twinkle{
+    0%,100%{filter:brightness(1);}
+    50%{filter:brightness(1.6);}
   }
   @media (prefers-reduced-motion: reduce){
     .ambient-particles{display:none;}
@@ -226,26 +261,33 @@
     filter:blur(0px);
   }
   .blob-mint{
-    width:320px;height:320px;
+    width:360px;height:360px;
     background:radial-gradient(circle at 35% 30%, #BFEAE0, #8FD4C4);
-    top:8%;
+    top:5%;
     left:50%;
     transform:translateX(-50%);
     animation:floatSlow 7s ease-in-out infinite;
   }
   .blob-gold{
-    width:110px;height:110px;
+    width:150px;height:150px;
     background:radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold));
-    bottom:10%;
-    left:6%;
+    bottom:8%;
+    left:2%;
     animation:floatSlow 6s ease-in-out infinite reverse;
   }
   .blob-coral{
-    width:70px;height:70px;
+    width:110px;height:110px;
     background:radial-gradient(circle at 35% 30%, #FF9C7A, var(--coral));
-    top:6%;
-    right:8%;
+    top:2%;
+    right:4%;
     animation:floatSlow 5.5s ease-in-out infinite;
+  }
+  .blob-pink{
+    width:130px;height:130px;
+    background:radial-gradient(circle at 35% 30%, #FBD8DE, var(--pink, #F3AEB9));
+    bottom:0%;
+    right:10%;
+    animation:floatSlow 6.5s ease-in-out infinite reverse;
   }
 
   .stage-figure{
@@ -291,6 +333,7 @@
   }
   .blob-gold{animation-name:floatSlowLeft;}
   .blob-coral{animation-name:floatSlowRight;}
+  .blob-pink{animation-name:floatSlowLeft;}
   .mini-avatar{animation-name:floatSlowRight;}
   @keyframes floatSlowLeft{
     0%,100%{transform:translateY(0);}
@@ -310,7 +353,7 @@
   }
 
   @media (prefers-reduced-motion: reduce){
-    .blob-mint, .blob-gold, .blob-coral, .stage-figure, .mini-avatar, .sparkle-deco{
+    .blob-mint, .blob-gold, .blob-coral, .blob-pink, .stage-figure, .mini-avatar, .sparkle-deco{
       animation:none !important;
     }
   }
@@ -572,6 +615,7 @@
     <div class="blob blob-mint"></div>
     <div class="blob blob-gold"></div>
     <div class="blob blob-coral"></div>
+    <div class="blob blob-pink"></div>
 
     <svg class="sparkle-deco sparkle-1" viewBox="0 0 24 24" fill="none">
       <path d="M12 2 L14 9 L21 9 L15.5 13.5 L17.5 21 L12 16.5 L6.5 21 L8.5 13.5 L3 9 L10 9 Z" fill="var(--gold)"/>
@@ -750,18 +794,22 @@ document.querySelectorAll('.lang-switch button').forEach(btn=>{
 (function(){
   const container = document.getElementById('ambientParticles');
   if(!container) return;
-  const count = window.innerWidth < 640 ? 10 : 18;
+  const colors = ['#E3C158', '#F3AEB9', '#8FD4C4', '#B9A6D9', '#FF9C7A'];
+  const count = window.innerWidth < 640 ? 16 : 28;
   for(let i = 0; i < count; i++){
     const p = document.createElement('div');
     p.className = 'particle';
-    const size = 3 + Math.random() * 5;
+    const size = 5 + Math.random() * 9;
+    const color = colors[Math.floor(Math.random() * colors.length)];
     p.style.width = size + 'px';
     p.style.height = size + 'px';
+    p.style.background = `radial-gradient(circle, ${color}, transparent 70%)`;
+    p.style.color = color;
     p.style.left = Math.random() * 100 + 'vw';
     p.style.bottom = '-20px';
-    p.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
-    p.style.animationDuration = (10 + Math.random() * 14) + 's';
-    p.style.animationDelay = (Math.random() * 14) + 's';
+    p.style.setProperty('--drift', (Math.random() * 90 - 45) + 'px');
+    p.style.animationDuration = (8 + Math.random() * 10) + 's, ' + (1.8 + Math.random() * 1.4) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's, ' + (Math.random() * 2) + 's';
     container.appendChild(p);
   }
 })();

@@ -51,6 +51,12 @@
     box-shadow:0 8px 20px rgba(27,42,74,0.15);
   }
   .page-title{font-family:'Amiri',serif;font-size:1.25rem;color:var(--ink);margin-bottom:14px;}
+  .cover-page{
+    background:linear-gradient(160deg, var(--ink-deep), var(--ink)) !important;
+    padding:50px 26px !important;
+  }
+  .cover-page .page-title{color:var(--gold-bright);font-size:1.15rem;margin-bottom:22px;}
+  .cover-page .page-text{color:var(--parchment);font-family:'Amiri',serif;font-size:1.35rem;line-height:2;}
   .page-text{font-size:1.1rem;line-height:1.95;color:var(--charcoal);}
   .book-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 6px 4px;}
   .book-nav button{
@@ -133,6 +139,7 @@ const sampleData = {
     'cta-lead': 'اكتب تفاصيله هلق، واستلم قصته الكاملة بأقل من ٥ دقايق.',
     'cta-btn': 'أنشئ قصة طفلك الآن',
     title: 'يوسف ومركبة النجوم الضائعة',
+    cover: 'هذه القصة كُتبت خصيصًا ليوسف —<br>نسخة وحيدة في العالم، لا يملكها أحد غيره.',
     pages: [
       'كان في ولد اسمه يوسف، بيحب يتفرج عالنجوم كل ليلة من شباك غرفته، وبيحلم إنه يصير رائد فضاء.',
       'بليلة من الليالي، شاف نجمة صغيرة عم تلمع بشكل غريب — كانت مركبة فضائية صغيرة، وواقعة بين الأشجار!',
@@ -152,6 +159,7 @@ const sampleData = {
     'cta-lead': "Fill in their details now, and get their full story in under 5 minutes.",
     'cta-btn': "Create Your Child's Story Now",
     title: "Youssef and the Lost Starship",
+    cover: "This story was written especially for Youssef —<br>a one-of-a-kind copy that belongs to no one else in the world.",
     pages: [
       "There was a boy named Youssef who loved watching the stars every night from his window, dreaming of becoming an astronaut.",
       "One night, he saw a strange, tiny light glowing near the trees — it was a little spaceship, stuck and lost!",
@@ -171,6 +179,7 @@ const sampleData = {
     'cta-lead': 'מלאו את הפרטים שלו עכשיו, וקבלו את הסיפור המלא תוך פחות מ-5 דקות.',
     'cta-btn': 'צרו את הסיפור של הילד שלכם עכשיו',
     title: 'יוסף וספינת הכוכבים האבודה',
+    cover: 'הסיפור הזה נכתב במיוחד עבור יוסף —<br>עותק יחיד בעולם, ששייך רק לו.',
     pages: [
       'היה פעם ילד בשם יוסף, שאהב להביט בכוכבים כל ערב מהחלון שלו, וחלם להיות אסטרונאוט.',
       'לילה אחד הוא ראה אור קטן ומוזר נוצץ ליד העצים — זו הייתה ספינת חלל קטנה, תקועה ואבודה!',
@@ -188,10 +197,23 @@ const pageIllustrations = ['page1.png', 'page2.png', 'page3.png', 'page4.png', '
 
 function renderPage(){
   const data = sampleData[currentLang];
-  const total = data.pages.length;
-  document.getElementById('pageTitle').textContent = currentPage === 0 ? data.title : `${data.title} — ${currentPage + 1}/${total}`;
-  document.getElementById('pageText').textContent = data.pages[currentPage];
-  document.getElementById('pageIllustration').src = pageIllustrations[currentPage];
+  const total = data.pages.length + 1; // +1 for the cover page
+  const bookPageEl = document.querySelector('.book-page');
+
+  if(currentPage === 0){
+    bookPageEl.classList.add('cover-page');
+    document.getElementById('pageIllustration').style.display = 'none';
+    document.getElementById('pageTitle').textContent = data.title;
+    document.getElementById('pageText').innerHTML = data.cover;
+  } else {
+    bookPageEl.classList.remove('cover-page');
+    document.getElementById('pageIllustration').style.display = 'block';
+    const storyIndex = currentPage - 1;
+    document.getElementById('pageTitle').textContent = `${data.title} — ${storyIndex + 1}/${data.pages.length}`;
+    document.getElementById('pageText').textContent = data.pages[storyIndex];
+    document.getElementById('pageIllustration').src = pageIllustrations[storyIndex];
+  }
+
   document.getElementById('prevBtn').disabled = currentPage === 0;
   document.getElementById('nextBtn').disabled = currentPage === total - 1;
 
@@ -227,7 +249,7 @@ document.getElementById('prevBtn').addEventListener('click', ()=>{
   if(currentPage > 0){ currentPage--; renderPage(); }
 });
 document.getElementById('nextBtn').addEventListener('click', ()=>{
-  if(currentPage < sampleData[currentLang].pages.length - 1){ currentPage++; renderPage(); }
+  if(currentPage < sampleData[currentLang].pages.length){ currentPage++; renderPage(); }
 });
 
 renderPage();
@@ -235,4 +257,3 @@ renderPage();
 
 </body>
 </html>
-دا

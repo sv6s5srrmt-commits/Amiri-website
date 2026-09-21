@@ -14,6 +14,7 @@
     --parchment-warm:#F1E8D2;
     --gold:#C9A227;
     --gold-bright:#E3C158;
+    --gold-deep:#8A6A14;
     --coral:#E4572E;
     --charcoal:#2B2118;
   }
@@ -511,6 +512,77 @@
     .trust-card img{width:110px;height:110px;}
   }
 
+  /* ---------- Hero certificate ---------- */
+  .cert-section{
+    max-width:600px;
+    margin:0 auto 14vh;
+    padding:0 6vw;
+    text-align:center;
+  }
+  .cert-section .eyebrow{
+    display:inline-block;
+    font-size:0.75rem;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+    border:1px solid var(--gold);
+    padding:6px 16px;
+    border-radius:999px;
+    margin-bottom:18px;
+  }
+  .cert-section h2{
+    font-size:clamp(1.5rem, 3.5vw, 2rem);
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .cert-section .sub{
+    color:#5A5142;
+    font-size:0.92rem;
+    max-width:340px;
+    margin:0 auto 34px;
+    line-height:1.7;
+  }
+  .certificate{
+    position:relative;
+    width:100%;
+    max-width:340px;
+    margin:0 auto;
+    background:
+      linear-gradient(160deg, var(--ink-deep), var(--ink) 55%, var(--ink-deep)),
+      repeating-linear-gradient(45deg, rgba(227,193,88,0.04) 0px, rgba(227,193,88,0.04) 1px, transparent 1px, transparent 12px);
+    border-radius:18px;
+    padding:5px;
+    box-shadow:0 24px 50px rgba(14,26,48,0.4);
+  }
+  .cert-gold-edge{border:1.5px solid var(--gold-bright);border-radius:14px;padding:20px 16px 16px;}
+  .cert-frame{
+    border:1.5px solid var(--gold);border-radius:10px;padding:20px 14px;
+    display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;
+  }
+  .cert-frame::before{content:'';position:absolute;inset:5px;border:1px solid rgba(227,193,88,0.35);border-radius:6px;pointer-events:none;}
+  .cert-corner{position:absolute;width:18px;height:18px;border:2px solid var(--gold-bright);}
+  .cert-corner.tl{top:-1.5px;left:-1.5px;border-right:none;border-bottom:none;border-radius:10px 0 0 0;}
+  .cert-corner.tr{top:-1.5px;right:-1.5px;border-left:none;border-bottom:none;border-radius:0 10px 0 0;}
+  .cert-corner.bl{bottom:-1.5px;left:-1.5px;border-right:none;border-top:none;border-radius:0 0 0 10px;}
+  .cert-corner.br{bottom:-1.5px;right:-1.5px;border-left:none;border-top:none;border-radius:0 0 10px 0;}
+  .cert-eyebrow{font-size:0.6rem;letter-spacing:2.5px;color:var(--gold-bright);text-transform:uppercase;margin-bottom:10px;}
+  .cert-title{font-family:'Amiri', serif;font-size:1.35rem;background:linear-gradient(180deg, var(--gold-bright), var(--gold-deep));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:14px;}
+  .cert-portrait-wrap{position:relative;width:120px;height:120px;margin-bottom:4px;}
+  .cert-laurel{position:absolute;inset:-18px;z-index:0;}
+  .cert-portrait{position:relative;z-index:1;width:120px;height:120px;border-radius:50%;object-fit:cover;object-position:60% 30%;border:3px solid var(--gold-bright);box-shadow:0 0 0 4px rgba(201,162,39,0.35), 0 10px 24px rgba(0,0,0,0.4);}
+  .cert-ribbon{display:flex;gap:5px;margin-top:8px;margin-bottom:12px;}
+  .cert-ribbon span{width:13px;height:28px;background:linear-gradient(180deg, #C0392B, #8E2A20);clip-path:polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);}
+  .cert-ribbon span:first-child{transform:rotate(-8deg);}
+  .cert-ribbon span:last-child{transform:rotate(8deg);}
+  .cert-grant-line{font-size:0.75rem;color:rgba(247,241,227,0.7);margin-bottom:5px;}
+  .cert-child-name{font-family:'Amiri', serif;font-size:1.7rem;color:var(--gold-bright);margin-bottom:10px;}
+  .cert-reason-line{font-size:0.78rem;color:rgba(247,241,227,0.72);line-height:1.8;max-width:230px;margin-bottom:14px;}
+  .cert-divider{width:60px;height:1px;background:linear-gradient(90deg, transparent, var(--gold-bright), transparent);margin-bottom:12px;}
+  .cert-signature{font-family:'Amiri', serif;font-size:0.95rem;color:var(--gold-bright);}
+  .cert-signature span{color:rgba(247,241,227,0.5);font-size:0.62rem;display:block;margin-top:3px;font-family:'Noto Sans Arabic',sans-serif;}
+  .cert-section .btn-primary{margin-top:30px;}
+
   /* ---------- Steps ---------- */
   .steps{
     max-width:1000px;
@@ -672,6 +744,39 @@
   </div>
 </section>
 
+<section class="cert-section reveal">
+  <span class="eyebrow" data-i18n="cert-eyebrow-label">هدية إضافية</span>
+  <h2 class="display" data-i18n="cert-headline">كل طفل يحصل على شهادة بطل</h2>
+  <p class="sub" data-i18n="cert-sub">بعد كل قصة، يحصل طفلك على شهادة بطل رسمية بإسمه وصورته — تذكار يفتخر بها للأبد</p>
+
+  <div class="certificate">
+    <div class="cert-gold-edge">
+      <div class="cert-frame">
+        <div class="cert-corner tl"></div><div class="cert-corner tr"></div><div class="cert-corner bl"></div><div class="cert-corner br"></div>
+        <div class="cert-eyebrow">Amiri — أميري</div>
+        <div class="cert-title" data-i18n="cert-title">شهادة بطل</div>
+        <div class="cert-portrait-wrap">
+          <svg class="cert-laurel" viewBox="0 0 200 200" fill="none">
+            <g stroke="#E3C158" stroke-width="2.5" stroke-linecap="round">
+              <path d="M30 100 Q20 60 40 30" fill="none"/><path d="M32 90 Q22 92 16 84"/><path d="M28 75 Q18 75 14 66"/><path d="M27 60 Q17 58 15 48"/><path d="M30 45 Q21 40 22 30"/>
+              <path d="M170 100 Q180 60 160 30" fill="none"/><path d="M168 90 Q178 92 184 84"/><path d="M172 75 Q182 75 186 66"/><path d="M173 60 Q183 58 185 48"/><path d="M170 45 Q179 40 178 30"/>
+            </g>
+          </svg>
+          <img class="cert-portrait" src="page6.png" alt="طفل بطل قصته">
+        </div>
+        <div class="cert-ribbon"><span></span><span></span></div>
+        <div class="cert-grant-line" data-i18n="cert-grant-line">تُمنح هذه الشهادة إلى</div>
+        <div class="cert-child-name" data-i18n="cert-child-name">يوسف</div>
+        <div class="cert-reason-line" data-i18n="cert-reason-line">تقديرًا لشجاعته وذكائه في مغامرته الخاصة، وإثباتًا أنه بطل قصته من أولها لآخرها</div>
+        <div class="cert-divider"></div>
+        <div class="cert-signature">Amiri<span data-i18n="cert-signature-sub">دار القصص الشخصية</span></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-primary" data-i18n="cta-primary" onclick="window.location.href='story.html'">ابدأ قصتك</button>
+</section>
+
 <section class="steps reveal">
   <div class="step">
     <div class="step-num" data-i18n="step1-num">١</div>
@@ -711,6 +816,14 @@ const translations = {
     'filmstrip-sub': 'هذه لقطات من قصة حقيقية — قصة طفلك ستكون بهذا العمق والتفصيل',
     'trust-quote': '"لم أتخيل أن ابني سيطلب مني قراءة القصة كل ليلة لأسبوعٍ كامل. رؤية اسمه بطلًا لقصةٍ حقيقية غيّرت طريقة نظره لنفسه."',
     'trust-author': '— أحد الآباء الذين جرّبوا Amiri',
+    'cert-eyebrow-label': 'هدية إضافية',
+    'cert-headline': 'كل طفل يحصل على شهادة بطل',
+    'cert-sub': 'بعد كل قصة، يحصل طفلك على شهادة بطل رسمية بإسمه وصورته — تذكار يفتخر بها للأبد',
+    'cert-title': 'شهادة بطل',
+    'cert-grant-line': 'تُمنح هذه الشهادة إلى',
+    'cert-child-name': 'يوسف',
+    'cert-reason-line': 'تقديرًا لشجاعته وذكائه في مغامرته الخاصة، وإثباتًا أنه بطل قصته من أولها لآخرها',
+    'cert-signature-sub': 'دار القصص الشخصية',
     'step1-num': '١',
     'step2-num': '٢',
     'step3-num': '٣',
@@ -735,6 +848,14 @@ const translations = {
     'filmstrip-sub': "These are scenes from a real story — your child's story will have this same depth and detail",
     'trust-quote': '"I never imagined my son would ask me to read the story every night for a whole week. Seeing his own name as the hero of a real story changed the way he sees himself."',
     'trust-author': '— A parent who tried Amiri',
+    'cert-eyebrow-label': 'A Bonus Gift',
+    'cert-headline': 'Every child receives a Hero Certificate',
+    'cert-sub': 'After every story, your child receives an official Hero Certificate with their name and portrait — a keepsake to treasure forever',
+    'cert-title': 'Hero Certificate',
+    'cert-grant-line': 'This certificate is awarded to',
+    'cert-child-name': 'Youssef',
+    'cert-reason-line': "In recognition of his courage and cleverness in his own adventure, and as proof that he is the hero of his story from beginning to end",
+    'cert-signature-sub': 'House of Personal Stories',
     'step1-num': '1',
     'step2-num': '2',
     'step3-num': '3',
@@ -759,6 +880,14 @@ const translations = {
     'filmstrip-sub': 'אלו קטעים מסיפור אמיתי — סיפורו של ילדכם יהיה בעומק ובפירוט דומים',
     'trust-quote': '"לא תיארתי לעצמי שבני יבקש ממני לקרוא את הסיפור בכל ערב במשך שבוע שלם. לראות את שמו כגיבור של סיפור אמיתי שינה את האופן שבו הוא רואה את עצמו."',
     'trust-author': '— הורה שניסה את Amiri',
+    'cert-eyebrow-label': 'מתנה נוספת',
+    'cert-headline': 'כל ילד מקבל תעודת גיבור',
+    'cert-sub': 'לאחר כל סיפור, ילדכם מקבל תעודת גיבור רשמית עם שמו ותמונתו — זיכרון שישמור עליו לנצח',
+    'cert-title': 'תעודת גיבור',
+    'cert-grant-line': 'תעודה זו מוענקת ל',
+    'cert-child-name': 'יוסף',
+    'cert-reason-line': 'הוקרה על אומץ וחוכמה בהרפתקה שלו, ולראיה שהוא גיבור סיפורו מתחילתו ועד סופו',
+    'cert-signature-sub': 'בית הסיפורים האישיים',
     'step1-num': '1',
     'step2-num': '2',
     'step3-num': '3',

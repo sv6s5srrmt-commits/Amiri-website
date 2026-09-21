@@ -13,16 +13,26 @@
     --mint:#8FD4C4; --pink:#F3AEB9; --lavender:#B9A6D9;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--parchment);color:var(--charcoal);font-family:'Noto Sans Arabic','Noto Sans',sans-serif;}
-  .bg-blob{position:fixed;border-radius:50%;filter:blur(2px);opacity:0.35;pointer-events:none;z-index:0;animation:bgFloat ease-in-out infinite;}
-  .bg-blob-1{width:220px;height:220px;background:radial-gradient(circle at 35% 30%, var(--mint), transparent 70%);top:-40px;right:-60px;animation-duration:9s;}
-  .bg-blob-2{width:160px;height:160px;background:radial-gradient(circle at 35% 30%, var(--pink), transparent 70%);top:40vh;left:-60px;animation-duration:11s;animation-direction:reverse;}
-  .bg-blob-3{width:130px;height:130px;background:radial-gradient(circle at 35% 30%, var(--gold-bright), transparent 70%);bottom:10vh;right:-40px;animation-duration:7.5s;}
-  .bg-blob-4{width:100px;height:100px;background:radial-gradient(circle at 35% 30%, var(--lavender), transparent 70%);bottom:30vh;left:10vw;animation-duration:8.5s;animation-direction:reverse;}
-  @keyframes bgFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-24px);}}
+  body{
+    background:
+      radial-gradient(circle at 15% 20%, rgba(143,212,196,0.5), transparent 45%),
+      radial-gradient(circle at 85% 15%, rgba(243,174,185,0.45), transparent 45%),
+      radial-gradient(circle at 50% 60%, rgba(185,166,217,0.35), transparent 50%),
+      radial-gradient(circle at 20% 90%, rgba(227,193,88,0.4), transparent 45%),
+      var(--parchment);
+    background-attachment:fixed;
+    color:var(--charcoal);font-family:'Noto Sans Arabic','Noto Sans',sans-serif;
+  }
+  .bg-blob{position:fixed;border-radius:50%;filter:blur(0px);opacity:0.55;pointer-events:none;z-index:0;animation:bgFloat ease-in-out infinite;}
+  .bg-blob-1{width:280px;height:280px;background:radial-gradient(circle at 35% 30%, var(--mint), transparent 70%);top:-40px;right:-60px;animation-duration:9s;}
+  .bg-blob-2{width:220px;height:220px;background:radial-gradient(circle at 35% 30%, var(--pink), transparent 70%);top:40vh;left:-70px;animation-duration:11s;animation-direction:reverse;}
+  .bg-blob-3{width:180px;height:180px;background:radial-gradient(circle at 35% 30%, var(--gold-bright), transparent 70%);bottom:10vh;right:-50px;animation-duration:7.5s;}
+  .bg-blob-4{width:150px;height:150px;background:radial-gradient(circle at 35% 30%, var(--lavender), transparent 70%);bottom:30vh;left:6vw;animation-duration:8.5s;animation-direction:reverse;}
+  @keyframes bgFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-28px);}}
   .ambient-particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-  .particle{position:absolute;border-radius:50%;background:radial-gradient(circle, var(--gold-bright), transparent 70%);opacity:0.5;animation:particleFloat linear infinite;}
-  @keyframes particleFloat{0%{transform:translateY(0) translateX(0) scale(1); opacity:0;}10%{opacity:0.6;}90%{opacity:0.35;}100%{transform:translateY(-100vh) translateX(var(--drift, 30px)) scale(0.6); opacity:0;}}
+  .particle{position:absolute;border-radius:50%;opacity:0.7;box-shadow:0 0 12px 2px currentColor;animation:particleFloat linear infinite, twinkle 2.4s ease-in-out infinite;}
+  @keyframes particleFloat{0%{transform:translateY(0) translateX(0) scale(1); opacity:0;}10%{opacity:0.85;}90%{opacity:0.6;}100%{transform:translateY(-100vh) translateX(var(--drift, 30px)) scale(0.6); opacity:0;}}
+  @keyframes twinkle{0%,100%{filter:brightness(1);}50%{filter:brightness(1.6);}}
   header, .wrap{position:relative;z-index:1;}
   @media (prefers-reduced-motion: reduce){.bg-blob, .particle{animation:none;}}
   [dir="rtl"] .display{font-family:'Amiri', serif;}
@@ -276,18 +286,22 @@ renderPage();
 (function(){
   const container = document.getElementById('ambientParticles');
   if(!container) return;
-  const count = window.innerWidth < 640 ? 8 : 14;
+  const colors = ['#E3C158', '#F3AEB9', '#8FD4C4', '#B9A6D9', '#FF9C7A'];
+  const count = window.innerWidth < 640 ? 12 : 20;
   for(let i = 0; i < count; i++){
     const p = document.createElement('div');
     p.className = 'particle';
-    const size = 3 + Math.random() * 5;
+    const size = 5 + Math.random() * 8;
+    const color = colors[Math.floor(Math.random() * colors.length)];
     p.style.width = size + 'px';
     p.style.height = size + 'px';
+    p.style.background = `radial-gradient(circle, ${color}, transparent 70%)`;
+    p.style.color = color;
     p.style.left = Math.random() * 100 + 'vw';
     p.style.bottom = '-20px';
-    p.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
-    p.style.animationDuration = (10 + Math.random() * 14) + 's';
-    p.style.animationDelay = (Math.random() * 14) + 's';
+    p.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+    p.style.animationDuration = (9 + Math.random() * 10) + 's, ' + (1.8 + Math.random() * 1.4) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's, ' + (Math.random() * 2) + 's';
     container.appendChild(p);
   }
 })();
